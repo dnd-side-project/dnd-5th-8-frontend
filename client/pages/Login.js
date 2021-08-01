@@ -20,9 +20,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { CLIENT_ID_IOS, CLIENT_ID_ANDROID } from "@env";
 
-// const CLIENT_ID_IOS = "1093078017797-4h18gb8q04qkntiv9sv76afev9810bvd.apps.googleusercontent.com";
-//const CLIENT_ID_ANDROID = "1093078017797-pkdo3e7ukjf8bg7pop01a0cufu8e87ih.apps.googleusercontent.com";
-
 const Title = styled.Text`
   position: absolute;
   top: 200px;
