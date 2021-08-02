@@ -13,7 +13,6 @@ import * as Linking from "expo-linking";
 import * as Google from "expo-google-app-auth";
 import axios from "axios";
 
-// credentials context
 import { CredentialsContext } from "../components/CredentialsContext";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -108,7 +107,7 @@ export default function Login({ navigation }) {
   };
 
   const persistLogin = (credentials, message, status) => {
-    AsyncStorage.setItem("flowerCribCredentials", JSON.stringify(credentials))
+    AsyncStorage.setItem("EightCredentials", JSON.stringify(credentials))
       .then(() => {
         handleMessage(message, status);
         setStoredCredentials(credentials);

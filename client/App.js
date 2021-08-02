@@ -1,45 +1,36 @@
-import React from "react";
-import { StyleSheet, Text, View, SafeAreaView, Button, Alert } from "react-native";
+import React, { useState } from "react";
 
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import RootStack from "./RootStack";
 
-import Constants from "expo-constants";
+import AppLoading from "expo-app-loading";
 
-import Login from "./pages/Login";
-import Profile from "./pages/Profile";
-import Home from "./pages/Home";
-
-import { StatusBar } from "expo-status-bar";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { CredentialsContext } from "./components/CredentialsContext";
 
-const Stack = createStackNavigator();
-
 export default function App() {
+  const [appReady, setAppReady] = useState(false);
+  const [storedCredentials, setStoredCredentials] = useState("");
+
+  const checkLoginCredentials = () => {
+    AsyncStorage.getItem("flowerCribCredentials")
+      .then((result) => {
+        if (result !== null) {
+          setStoredCredentials(JSON.parse(result));
+        } else {
+          setStoredCredentials(null);
+        }
+      })
+      .catch((error) => console.log(error));
+  };
+
+  if (!appReady) {
+    return <AppLoading startAsync={checkLoginCredentials} onFinish={() => setAppReady(true)} onError={console.warn} />;
+  }
+
   return (
-    <>
-      <CredentialsContext.Consumer>
-        {({ storedCredentials }) => (
-          <NavigationContainer>
-            <Stack.Navigator
-              screenOptions={{
-                headerShown: false,
-                cardStyle: { backgroundColor: "white" },
-              }}
-            >
-              {storedCredentials ? (
-                <Stack.Screen name="Home" component={Home} />
-              ) : (
-                <Stack.Screen name="Login" component={Login} />
-              )}
-            </Stack.Navigator>
-          </NavigationContainer>
-        )}
-      </CredentialsContext.Consumer>
-      <StatusBar style="light" />
-    </>
+    <CredentialsContext.Provider value={{ storedCredentials, setStoredCredentials }}>
+      <RootStack />
+    </CredentialsContext.Provider>
   );
 }
-
-// <Stack.Screen name="Profile" component={Profile} options={{ title: "프로필 페이지" }} />
