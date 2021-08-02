@@ -1,18 +1,14 @@
 import React from "react";
-import { StyleSheet, Text, View, SafeAreaView, Button, Alert } from "react-native";
-
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-
-import Constants from "expo-constants";
+import { StatusBar } from "expo-status-bar";
+import { CredentialsContext } from "./components/CredentialsContext";
 
 import Login from "./pages/Login";
-import Profile from "./pages/Profile";
 import Home from "./pages/Home";
-
-import { StatusBar } from "expo-status-bar";
-
-import { CredentialsContext } from "./components/CredentialsContext";
+import Profile from "./pages/Profile";
+import Space from "./pages/Space";
+import CreateSpace from "./pages/CreateSpace";
 
 const Stack = createStackNavigator();
 
@@ -25,7 +21,6 @@ export default function App() {
             <Stack.Navigator
               screenOptions={{
                 headerShown: false,
-                cardStyle: { backgroundColor: "white" },
               }}
             >
               {storedCredentials ? (
@@ -33,6 +28,9 @@ export default function App() {
               ) : (
                 <Stack.Screen name="Login" component={Login} />
               )}
+              <Stack.Screen name="Profile" component={Profile} />
+              <Stack.Screen name="Space" component={Space} />
+              <Stack.Screen name="CreateSpace" component={CreateSpace} />
             </Stack.Navigator>
           </NavigationContainer>
         )}

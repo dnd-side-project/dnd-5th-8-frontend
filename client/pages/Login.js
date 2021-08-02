@@ -1,70 +1,11 @@
 import React, { useState, useContext } from "react";
-import { Text, ActivityIndicator } from "react-native";
-import { WebView } from "react-native-webview";
-
-import Container from "../components/Container";
-import Contents from "../components/Contents";
-import Button from "../components/Button";
-
-import styled from "styled-components";
-
-import * as Linking from "expo-linking";
-
-import * as Google from "expo-google-app-auth";
-import axios from "axios";
-
+import { ActivityIndicator } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Container, Title, GoogleLoginButton, SignUp, Label2 } from "../components/styles";
 import { CredentialsContext } from "../components/CredentialsContext";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import * as Google from "expo-google-app-auth";
 import { CLIENT_ID_IOS, CLIENT_ID_ANDROID } from "@env";
-
-const Title = styled.Text`
-  position: absolute;
-  top: 200px;
-  font-size: 100px;
-  font-weight: bold;
-  color: #d5aaff;
-`;
-
-const KakaoLoginButton = styled.TouchableOpacity`
-  width: 297px;
-  height: 45px;
-
-  background: #fae100;
-  border-radius: 80px;
-
-  justify-content: center;
-  align-items: center;
-
-  margin-top: 100px;
-`;
-
-const GoogleLoginButton = styled.TouchableOpacity`
-  width: 297px;
-  height: 45px;
-
-  background: #ffffff;
-  border-radius: 80px;
-
-  justify-content: center;
-  align-items: center;
-
-  margin-top: 20px;
-`;
-
-const SignUp = styled.TouchableOpacity`
-  justify-content: center;
-  align-items: center;
-
-  margin-top: 20px;
-`;
-
-const Label = styled.Text`
-  font-size: 16px;
-  font-weight: bold;
-  color: #000000;
-`;
 
 export default function Login({ navigation }) {
   const [hidePassword, setHidePassword] = useState(true);
@@ -123,17 +64,17 @@ export default function Login({ navigation }) {
       <Title>에잇</Title>
       {!googleSubmitting && (
         <GoogleLoginButton onPress={handleGoogleSignin} google={true}>
-          <Label google={true}>구글 계정으로 로그인</Label>
+          <Label2 google={true}>구글 계정으로 로그인</Label2>
         </GoogleLoginButton>
       )}
       {googleSubmitting && (
         <GoogleLoginButton disabled={true} google={true}>
-          <ActivityIndicator size="large" color={"yellow"} />
+          <ActivityIndicator size="large" color={"#8743FF"} />
         </GoogleLoginButton>
       )}
 
       <SignUp>
-        <Label style={{ color: "#ff9c78", textDecorationLine: "underline" }}>이메일로 회원가입</Label>
+        <Label2 style={{ color: "#ff9c78", textDecorationLine: "underline" }}>이메일로 회원가입</Label2>
       </SignUp>
     </Container>
   );

@@ -1,11 +1,7 @@
 import React, { useState } from "react";
-
 import RootStack from "./RootStack";
-
 import AppLoading from "expo-app-loading";
-
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
 import { CredentialsContext } from "./components/CredentialsContext";
 
 export default function App() {
@@ -13,7 +9,7 @@ export default function App() {
   const [storedCredentials, setStoredCredentials] = useState("");
 
   const checkLoginCredentials = () => {
-    AsyncStorage.getItem("flowerCribCredentials")
+    AsyncStorage.getItem("EightCredentials")
       .then((result) => {
         if (result !== null) {
           setStoredCredentials(JSON.parse(result));
