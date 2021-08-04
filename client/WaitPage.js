@@ -58,6 +58,5 @@ const styles = StyleSheet.create({
     marginHorizontal: '16px',
   },
   title: {
-    fontSize: '20px',
   },
 });
