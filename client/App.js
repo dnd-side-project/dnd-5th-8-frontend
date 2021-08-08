@@ -7,6 +7,7 @@ import LoginPage from './LoginPage';
 import TalkPage from './TalkPage';
 import WaitPage from './WaitPage';
 import CategorySelectionPage from './CategorySelectionPage';
+import MainHome from './MainHome';
 
 const Stack = createStackNavigator();
 
@@ -34,6 +35,10 @@ export default function App() {
         <Stack.Screen 
           name="CategorySelection" 
           component={CategorySelectionPage} 
+        />
+        <Stack.Screen 
+          name="MainHome" 
+          component={MainHome} 
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -16,6 +16,12 @@ export default function HomePage({ navigation }) {
         navigation.navigate('Talk')
       }
     />
+    <Button
+      title="메인 홈 이동"
+      onPress={() =>
+        navigation.navigate('MainHome')
+      }
+    />
     </>
   );
 }
