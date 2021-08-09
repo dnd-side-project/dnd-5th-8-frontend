@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import Space from "./pages/Space";
 import CreateSpace from "./pages/CreateSpace";
+import Comment from "./pages/Comment";
 
 const Stack = createStackNavigator();
 
@@ -30,6 +31,7 @@ export default function App() {
               )}
               <Stack.Screen name="Profile" component={Profile} />
               <Stack.Screen name="Space" component={Space} />
+              <Stack.Screen name="Comment" component={Comment} />
               <Stack.Screen name="CreateSpace" component={CreateSpace} />
             </Stack.Navigator>
           </NavigationContainer>

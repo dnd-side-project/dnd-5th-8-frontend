@@ -198,6 +198,13 @@ export default function Home({ navigation }) {
       >
         <Label2>스페이스 생성</Label2>
       </TestButton>
+      <TestButton
+        onPress={() => {
+          navigation.navigate("Comment", { testValue: email });
+        }}
+      >
+        <Label2>댓글 페이지</Label2>
+      </TestButton>
       <TestButton onPress={testRequest}>
         <Label2>요청테스트</Label2>
       </TestButton>
