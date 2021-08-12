@@ -41,15 +41,13 @@ export const Container3 = styled.View`
 export const Title = styled.Text`
   position: absolute;
   top: 50px;
-  font-size: 100px;
+  font-size: 70px;
   font-weight: bold;
   color: #d5aaff;
 `;
 
 export const Title2 = styled.Text`
-  position: absolute;
-  top: 50px;
-  font-size: 50px;
+  font-size: 30px;
   font-weight: bold;
   color: #d5aaff;
 `;
@@ -154,4 +152,10 @@ export const LogOutButton = styled.TouchableOpacity`
   align-items: center;
 
   margin: 10px;
+`;
+
+export const MsgBox = styled.Text`
+  text-align: center;
+  font-size: 13px;
+  color: ${(props) => (props.type == "SUCCESS" ? "#10B981" : "#EF4444")};
 `;

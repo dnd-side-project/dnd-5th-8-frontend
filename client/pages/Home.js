@@ -18,25 +18,25 @@ import {
   TestButton,
   LogOutButton,
 } from "../components/styles";
+
 import { LinearGradient } from "expo-linear-gradient";
-import * as ImagePicker from "expo-image-picker";
-import * as DocumentPicker from "expo-document-picker";
 
 export default function Home({ navigation }) {
   const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext);
   const { name, email, photoUrl } = storedCredentials;
+
   const [profileImage, setProfileImage] = useState("");
   const [progress, setProgress] = useState(0);
   const [image, setImage] = useState();
   const [text, setText] = useState("");
 
-  useEffect(async () => {
-    if (Platform.OS !== "web") {
-      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== "granted") {
-        alert("Sorry, we need camera roll permissions to make this work!");
-      }
-    }
+  useEffect(() => {
+    // if (Platform.OS !== "web") {
+    //   const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    //   if (status !== "granted") {
+    //     alert("Sorry, we need camera roll permissions to make this work!");
+    //   }
+    // }
   }, []);
 
   const PickImage = async () => {
@@ -98,18 +98,6 @@ export default function Home({ navigation }) {
     } catch (error) {
       console.log(error.message);
     }
-
-    // fetch("http://192.168.2.111:8080/", {
-    //   method: "POST",
-    //   headers: {
-    //     Accept: "application/json",
-    //     "Content-Type": "application/json",
-    //   },
-    //   // send our base64 string as POST request
-    //   body: JSON.stringify({
-    //     imgsource: image.base64,
-    //   }),
-    // });
   };
 
   const AvatarImg = photoUrl
@@ -150,36 +138,10 @@ export default function Home({ navigation }) {
     setProfileImage(result.uri);
   };
 
-  const store = async () => {
-    const credentials = {
-      name: text,
-      email: email,
-      photoUrl: photoUrl,
-    };
-    AsyncStorage.setItem("EightCredentials", JSON.stringify(credentials))
-      .then(() => {
-        setStoredCredentials(credentials);
-        alert("수정 완료");
-      })
-      .catch((error) => {
-        alert("이미지 수정을 완료하지 못했습니다.");
-      });
-  };
-
   return (
     <Container>
       <StatusBar style="light" />
       <Title>홈 페이지</Title>
-      <Avatar resizeMode="cover" source={AvatarImg} />
-      <Label3 welcome={true}>{name || "Default Name"}</Label3>
-      <Label3 welcome={true}>{email || "Defalt Email"}</Label3>
-
-      <StyledTextInput value={text} onChangeText={(value) => setText(value)}></StyledTextInput>
-
-      <TouchableOpacity onPress={store}>
-        <Label3>저장</Label3>
-      </TouchableOpacity>
-      <Image source={{ uri: profileImage }} style={{ width: 100, height: 100 }} />
 
       {image && <Image source={{ uri: image }} style={{ width: 100, height: 100 }} />}
 
@@ -191,6 +153,22 @@ export default function Home({ navigation }) {
         )}
       </TouchableOpacity> */}
       {profileImage ? <Label3 onPress={uploadProfileImage}>업로드</Label3> : null}
+
+      <TestButton
+        onPress={() => {
+          navigation.navigate("MyPage");
+        }}
+      >
+        <Label2>마이 페이지</Label2>
+      </TestButton>
+
+      <TestButton
+        onPress={() => {
+          navigation.navigate("NotificationTest");
+        }}
+      >
+        <Label2>알람 테스트</Label2>
+      </TestButton>
       <TestButton
         onPress={() => {
           navigation.navigate("CreateSpace");
@@ -200,7 +178,7 @@ export default function Home({ navigation }) {
       </TestButton>
       <TestButton
         onPress={() => {
-          navigation.navigate("Comment", { testValue: email });
+          navigation.navigate("Comment", { credentials: storedCredentials });
         }}
       >
         <Label2>댓글 페이지</Label2>

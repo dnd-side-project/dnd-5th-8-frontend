@@ -6,10 +6,12 @@ import { CredentialsContext } from "./components/CredentialsContext";
 
 import Login from "./pages/Login";
 import Home from "./pages/Home";
+import MyPage from "./pages/MyPage";
 import Profile from "./pages/Profile";
 import Space from "./pages/Space";
 import CreateSpace from "./pages/CreateSpace";
 import Comment from "./pages/Comment";
+import NotificationTest from "./pages/NotificationTest";
 
 const Stack = createStackNavigator();
 
@@ -25,14 +27,18 @@ export default function App() {
               }}
             >
               {storedCredentials ? (
-                <Stack.Screen name="Home" component={Home} />
+                <>
+                  <Stack.Screen name="Home" component={Home} />
+                  <Stack.Screen name="Profile" component={Profile} />
+                  <Stack.Screen name="MyPage" component={MyPage} />
+                  <Stack.Screen name="Space" component={Space} />
+                  <Stack.Screen name="Comment" component={Comment} />
+                  <Stack.Screen name="CreateSpace" component={CreateSpace} />
+                  <Stack.Screen name="NotificationTest" component={NotificationTest} />
+                </>
               ) : (
                 <Stack.Screen name="Login" component={Login} />
               )}
-              <Stack.Screen name="Profile" component={Profile} />
-              <Stack.Screen name="Space" component={Space} />
-              <Stack.Screen name="Comment" component={Comment} />
-              <Stack.Screen name="CreateSpace" component={CreateSpace} />
             </Stack.Navigator>
           </NavigationContainer>
         )}

@@ -4,6 +4,31 @@ import AppLoading from "expo-app-loading";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CredentialsContext } from "./components/CredentialsContext";
 
+import { RootSiblingParent } from "react-native-root-siblings";
+import { configureFonts, DefaultTheme, Provider as PaperProvider } from "react-native-paper";
+
+const fontConfig = {
+  ios: {
+    regular: {
+      fontSize: "20",
+    },
+  },
+  android: {
+    regular: {
+      fontSize: "20",
+    },
+  },
+};
+
+const theme = {
+  ...DefaultTheme,
+  roundness: 2,
+  colors: {
+    ...DefaultTheme.colors,
+    onSurface: "#3C0CE3",
+  },
+  fonts: configureFonts(fontConfig),
+};
 export default function App() {
   const [appReady, setAppReady] = useState(false);
   const [storedCredentials, setStoredCredentials] = useState("");
@@ -17,7 +42,7 @@ export default function App() {
           setStoredCredentials(null);
         }
       })
-      .catch((error) => console.log(error));
+      .catch((error) => alert(error));
   };
 
   if (!appReady) {
@@ -26,7 +51,9 @@ export default function App() {
 
   return (
     <CredentialsContext.Provider value={{ storedCredentials, setStoredCredentials }}>
-      <RootStack />
+      <PaperProvider theme={theme}>
+        <RootStack />
+      </PaperProvider>
     </CredentialsContext.Provider>
   );
 }
