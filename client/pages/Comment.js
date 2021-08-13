@@ -23,95 +23,93 @@ import axios from "axios";
 import { Container2, Container3, Title2, Comments, Label3, SpaceButton, StyledTextInput } from "../components/styles";
 
 import EmojiPicker from "rn-emoji-keyboard";
+import { set } from "react-native-reanimated";
 
-export default function CreateSpace(props) {
+export default function Comment(props) {
+  // Home 컴포넌트에서 값을 가져옴
+  // navigation.navigate의 매개변수로 들어있었기 때문에 props.route.params
+  const { name, email, photoUrl } = props.route.params.credentials;
+
+  const { communicationList, postId } = { postId: [1, 2, 3, 4, 5, 6, 7], communicationList: [2, 4, 6] };
+
   const [ready, setReady] = useState(false);
 
-  const time = new Date().toUTCString();
-  const [now, setNow] = useState(time);
+  let year = new Date().getFullYear();
+  let month = new Date().getMonth() + 1;
+  let day = new Date().getDate();
+  let hour = new Date().getHours();
+  let minute = new Date().getMinutes();
+  minute = minute >= 10 ? minute : `0${minute}`;
+  let second = new Date().getSeconds();
+  second = second >= 10 ? second : `0${second}`;
+  const time = `${year}.${month}.${day} ${hour}:${minute}:${second}`;
 
-  const [number, setNumber] = useState(2);
+  // 서버 연동 시 주고 받으면서 매번 확인하기!
+  // 추후에 초기화값에 0이 아닌 서버에서 받아온 값 넣기
+  // 그러면 키 뿐만 아니라 모든 값도 같이 받아오면 될 듯?
+  const [key, setKey] = useState(0);
   const [comment, setComment] = useState("");
-  const [commentList, setCommentList] = useState([
-    {
-      key: 0,
-      id: "test1@email.com",
-      title: "댓글1",
-    },
-    {
-      key: 1,
-      id: "test2@email.com",
-      title: "댓글2",
-    },
-  ]);
+  const [commentList, setCommentList] = useState([]);
 
   const [isOpenEmoji, setIsOpenEmoji] = useState(false);
   const [emoji, setEmoji] = useState("");
 
-  const [edited, setEdited] = useState(null);
-
-  const { name, email, photoUrl } = props.route.params.credentials;
-
-  // 서버에 보낼 데이터
-  const body = {
-    name: name,
-    email: email,
-    photoUrl: photoUrl,
-    time: now,
-    emoji: emoji,
-  };
-
-  const handleEmojiSelect = (emojiObject) => {
-    if (emoji === emojiObject.emoji) {
-      setEmoji("");
-    } else {
-      setEmoji(emojiObject.emoji);
-    }
-  };
+  useEffect(() => {
+    // 서버 DB에 저장된 데일리퀘스천 가져오기
+    // axios.post("/dailyquestion", { postId: postId }).then((res) => alert(res));
+    // // 서버 DB에 저장된 댓글 가져오기
+    // axios.post("/comment", { postId: postId }).then((res) => {});
+    //.catch((err) => alert("댓글을 받아오지 못했습니다."));
+  });
 
   const handleAddComment = (input) => {
     Keyboard.dismiss();
 
     const newComment = [...commentList, input];
+    setCommentList(newComment);
+    setKey(key + 1);
 
-    AsyncStorage.setItem("storedComments", JSON.stringify(newComment))
-      .then(() => {
-        setCommentList(newComment);
-        setComment("");
-      })
-      .catch((err) => alert(err));
+    // axios
+    //   .post("URL", input)
+    //   .then((res) => alert(res))
+    //   .catch((err) => alert(err));
   };
 
   const handleEditComment = (input) => {
     const newComment = [...commentList, input];
   };
 
-  const handleDeleteComment = (key) => {
-    const newCommentList = [...commentList];
+  const handleDeleteComment = (comment) => {
+    const newCommentList = commentList.filter((item) => item.key !== comment.key);
 
-    const commentIndex = commentList.findIndex((item) => {
-      alert(item.key);
-      item.key === key;
-    });
+    setCommentList(newCommentList);
 
-    //const key = `${(todos[todos.length - 1] && parseInt(todos[todos.length - 1].key) + 1) || 1}`;
-
-    // commentList에서 commentIndex번째 인덱스부터 1개 원소 제거
-    newCommentList.splice(commentIndex, 1);
-
-    AsyncStorage.setItem("storedComments", JSON.stringify(newCommentList))
-      .then(() => {
-        setCommentList(newCommentList);
-      })
-      .catch((err) => alert(err));
+    // axios
+    //   .delete("URL", input)
+    //   .then((res) => alert(res))
+    //   .catch((err) => alert(err));
   };
 
   const loadCommentList = () => {
     // axios
+    // 서버 DB에 저장된 데일리퀘스천 가져오기
+    // axios.post("/dailyquestion", { postId: postId }).then((res) => alert(res));
+    // setCommentList(res);
+    // // 서버 DB에 저장된 댓글 가져오기
+    // axios.post("/comment", { postId: postId }).then((res) => {});
+    //.catch((err) => alert("댓글을 받아오지 못했습니다."));
+    return;
   };
 
-  // 100vw
-  const width = Dimensions.get("window").width;
+  const handleEmojiSelect = (emojiObject) => {
+    console.log(typeof emojiObject.emoji);
+    // 같으면 삭제, 다르면 추가
+    if (emoji === emojiObject.emoji) {
+      setEmoji("");
+    } else {
+      setEmoji(emojiObject.emoji);
+    }
+  };
 
   if (!ready) {
     return <AppLoading startAsync={loadCommentList} onFinish={() => setReady(true)} onError={console.warn} />;
@@ -121,7 +119,7 @@ export default function CreateSpace(props) {
     <Container2>
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
         <FlatList
-          style={{ marginTop: 150, width: width }}
+          style={{ height: "100%" }}
           numColumns={1}
           horizontal={false}
           data={commentList}
@@ -135,15 +133,20 @@ export default function CreateSpace(props) {
                 paddingVertical: 10,
               }}
             >
-              <View style={{ flexDirection: "row" }}>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Image
                   source={{
-                    uri: photoUrl,
+                    url: item.photoUrl,
                   }}
                   style={{ width: 50, height: 50, alignContent: "center", borderRadius: 25 }}
                 />
-                <Title2 style={{ padding: 7 }}>{name}</Title2>
-                <Label3>{item.title}</Label3>
+                <Title2 style={{ padding: 7 }}>{item.name}</Title2>
+                <Label3>{item.comment}</Label3>
+              </View>
+
+              <Label3 style={{ fontSize: 17, fontWeight: 0 }}>{item.time}</Label3>
+
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <TouchableOpacity onPress={() => setIsOpenEmoji(true)}>
                   <Image
                     source={{
@@ -152,21 +155,12 @@ export default function CreateSpace(props) {
                     style={{ width: 50, height: 50, alignContent: "center" }}
                   />
                 </TouchableOpacity>
-              </View>
-
-              <Label3 style={{ fontSize: 17, fontWeight: 0 }}>{now.toString()}</Label3>
-
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Label3>{emoji}</Label3>
-                <TouchableOpacity
-                  onPress={() => {
-                    alert(item.key);
-                  }}
-                >
+                <TouchableOpacity>
                   <Label3 style={{ fontSize: 17 }}>덧글 쓰기</Label3>
                 </TouchableOpacity>
                 <Button title="수정" color="white" onPress={handleEditComment} />
-                <Button title="삭제" color="white" onPress={() => handleDeleteComment(item.key)} />
+                <Button title="삭제" color="white" onPress={(id) => handleDeleteComment(item)} />
               </View>
             </View>
           )}
@@ -182,9 +176,8 @@ export default function CreateSpace(props) {
         <StyledTextInput value={comment} onChangeText={(value) => setComment(value)} placeholder={"댓글을 입력하세요."} />
         <TouchableOpacity
           onPress={() => {
-            handleAddComment({ title: comment, id: "1@test.com", key: number });
-            setNumber(number + 1);
-            setNow(time);
+            setComment("");
+            handleAddComment({ key: key, photoUrl: photoUrl, name: name, comment: comment, emoji, emoji, time: time });
           }}
           disabled={!comment}
         >

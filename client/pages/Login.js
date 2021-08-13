@@ -40,11 +40,9 @@ export default function Login({ navigation }) {
           handleMessage("구글 로그인 취소");
         }
         setGoogleSubmitting(false);
-        alert("로그인 성공!");
       })
       .catch((error) => {
         handleMessage("ERROR");
-        alert(error);
         setGoogleSubmitting(false);
       });
   };
@@ -54,10 +52,11 @@ export default function Login({ navigation }) {
       .then(() => {
         handleMessage(message, status);
         setStoredCredentials(credentials);
+        alert("로그인 유지 성공");
       })
       .catch((error) => {
         handleMessage("로그인 유지 실패");
-        alert(error);
+        alert("로그인 유지 실패");
       });
 
     const data = {
@@ -70,7 +69,6 @@ export default function Login({ navigation }) {
       .post("http://ec2-13-209-36-69.ap-northeast-2.compute.amazonaws.com:8080/user", data)
       .then((res) => {
         alert("로그인 요청 성공");
-        alert(res);
         alert(JSON.stringify(res));
       })
       .catch((err) => alert(err));
@@ -81,7 +79,7 @@ export default function Login({ navigation }) {
       <Title>에잇</Title>
       {!googleSubmitting && (
         <GoogleLoginButton onPress={handleGoogleSignin}>
-          <Label2 google={true}>구글 계정으로 로그인</Label2>
+          <Label2>구글 계정으로 로그인</Label2>
         </GoogleLoginButton>
       )}
       {googleSubmitting && (

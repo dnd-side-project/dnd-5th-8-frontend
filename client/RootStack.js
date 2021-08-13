@@ -12,6 +12,8 @@ import Space from "./pages/Space";
 import CreateSpace from "./pages/CreateSpace";
 import Comment from "./pages/Comment";
 import NotificationTest from "./pages/NotificationTest";
+import BottomSheet from "./pages/BottomSheet";
+import Letter from "./pages/Letter";
 
 const Stack = createStackNavigator();
 
@@ -35,6 +37,8 @@ export default function App() {
                   <Stack.Screen name="Comment" component={Comment} />
                   <Stack.Screen name="CreateSpace" component={CreateSpace} />
                   <Stack.Screen name="NotificationTest" component={NotificationTest} />
+                  <Stack.Screen name="BottomSheet" component={BottomSheet} />
+                  <Stack.Screen name="Letter" component={Letter} />
                 </>
               ) : (
                 <Stack.Screen name="Login" component={Login} />

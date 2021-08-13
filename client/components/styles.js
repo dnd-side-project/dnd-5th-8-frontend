@@ -24,17 +24,13 @@ export const Container = styled.View`
 export const Container2 = styled.View`
   flex: 1;
   background: #170c59;
-
-  justify-content: center;
-  align-items: flex-start;
-
   padding: 100px 0;
+  width: 100%;
 `;
 export const Container3 = styled.View`
-  display: flex;
   flex-direction: row;
+  align-items: center;
   background: #170c59;
-
   margin-bottom: 30px;
 `;
 
@@ -86,7 +82,7 @@ export const SignUp = styled.TouchableOpacity`
 `;
 
 export const StyledTextInput = styled.TextInput`
-  width: 330;
+  flex: 1;
   border-radius: 5px;
   border: 10px solid purple;
   font-size: 25px;

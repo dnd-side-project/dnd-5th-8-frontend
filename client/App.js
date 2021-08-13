@@ -4,7 +4,6 @@ import AppLoading from "expo-app-loading";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CredentialsContext } from "./components/CredentialsContext";
 
-import { RootSiblingParent } from "react-native-root-siblings";
 import { configureFonts, DefaultTheme, Provider as PaperProvider } from "react-native-paper";
 
 const fontConfig = {

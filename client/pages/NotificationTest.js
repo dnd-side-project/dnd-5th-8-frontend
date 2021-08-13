@@ -3,9 +3,6 @@ import { StyleSheet, View, Button } from "react-native";
 import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
 
-const PUSH_REGISTRATION_ENDPOINT = "http://test/token";
-const MESSAGE_ENPOINT = "http://test/message";
-
 // Show notifications when the app is in the foreground
 Notifications.setNotificationHandler({
   handleNotification: async () => {
@@ -17,7 +14,7 @@ Notifications.setNotificationHandler({
   },
 });
 
-export default function NotificationTest() {
+export default function NotificationTest(props) {
   useEffect(() => {
     // Permission for iOS
     Permissions.getAsync(Permissions.NOTIFICATIONS)
@@ -31,7 +28,6 @@ export default function NotificationTest() {
       })
       .then((statusObj) => {
         // If permission is still not given throw error
-        alert(JSON.stringify(statusObj));
         if (statusObj.status !== "granted") {
           throw new Error("Permission not granted.");
         }
@@ -40,6 +36,7 @@ export default function NotificationTest() {
         return Notifications.getExpoPushTokenAsync();
       })
       .then((response) => {
+        alert(response);
         const deviceToken = response.data;
         console.log({ deviceToken });
       })
@@ -47,6 +44,24 @@ export default function NotificationTest() {
         alert(err);
         return null;
       });
+
+    // const data = JSON.stringify({
+    //   token: {
+    //     value: deviceToken,
+    //   },
+    //   user: {
+    //     name: "솔다",
+    //   },
+    // });
+
+    // const config = {
+    //   headers: {
+    //     Accept: "application/json",
+    //     "Content-Type": "application/json",
+    //   },
+    // };
+
+    // axios.post("URL", data, config);
   }, []);
 
   useEffect(() => {
@@ -81,6 +96,7 @@ export default function NotificationTest() {
   return (
     <View style={styles.container}>
       <Button title="Trigger Local Notification" onPress={triggerLocalNotificationHandler} />
+      <Button onPress={props.navigation.goBack} title="뒤로 가기" />
     </View>
   );
 }
