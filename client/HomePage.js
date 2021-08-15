@@ -16,6 +16,12 @@ export default function HomePage({ navigation }) {
         navigation.navigate('Talk')
       }
     />
+    <Button
+      title="스페이스 참여하기"
+      onPress={() =>
+        navigation.navigate('AttendSpace')
+      }
+    />
     </>
   );
 }
