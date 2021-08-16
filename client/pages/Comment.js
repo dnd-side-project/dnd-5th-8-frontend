@@ -25,6 +25,8 @@ import { Container2, Container3, Title2, Comments, Label3, SpaceButton, StyledTe
 import EmojiPicker from "rn-emoji-keyboard";
 import { set } from "react-native-reanimated";
 
+const URL = "http://ec2-13-209-36-69.ap-northeast-2.compute.amazonaws.com:8080/";
+
 export default function Comment(props) {
   // Home 컴포넌트에서 값을 가져옴
   // navigation.navigate의 매개변수로 들어있었기 때문에 props.route.params
@@ -53,6 +55,9 @@ export default function Comment(props) {
 
   const [isOpenEmoji, setIsOpenEmoji] = useState(false);
   const [emoji, setEmoji] = useState("");
+
+  const [questionList, SetQuenstionList] = useState([]);
+  const [answerList, SetAnswerList] = useState([]);
 
   useEffect(() => {
     // 서버 DB에 저장된 데일리퀘스천 가져오기
@@ -115,11 +120,55 @@ export default function Comment(props) {
     return <AppLoading startAsync={loadCommentList} onFinish={() => setReady(true)} onError={console.warn} />;
   }
 
+  const getDailyQuestion = () => {
+    const newQuestionList = [...questionList];
+
+    axios
+      .get(`${URL}/daily-questions/list/space/2`)
+      .then((res) => {
+        res.data.map((element) => {
+          // 중복 제거 구현 필요
+          newQuestionList.push(element);
+          SetQuenstionList(newQuestionList);
+        });
+      })
+      .catch((err) => alert(err));
+  };
+
+  const getAnswer = (id) => {
+    const newAnswerList = [...answerList];
+
+    axios
+      .get(`${URL}/daily-questions/${id}/space/2`)
+      .then((res) => {
+        console.log("TEST:", res.data);
+        res.data.answer.map((elem) => {
+          newAnswerList.push(elem.content);
+          SetAnswerList(newAnswerList);
+        });
+      })
+      .catch((err) => alert(err));
+  };
+
   return (
     <Container2>
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
         <FlatList
-          style={{ height: "100%" }}
+          data={questionList}
+          renderItem={({ item }) => (
+            <View>
+              <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+                <Label3>{item.content}</Label3>
+                <TouchableOpacity onPress={() => getAnswer(item.questionId)}>
+                  <Label3>답변 {item.answerCount}</Label3>
+                </TouchableOpacity>
+              </View>
+              <Label3 style={{ fontSize: 17, fontWeight: "300" }}>{item.date}</Label3>
+            </View>
+          )}
+        />
+        <FlatList
+          style={{ height: "70%" }}
           numColumns={1}
           horizontal={false}
           data={commentList}
@@ -172,6 +221,9 @@ export default function Comment(props) {
         <EmojiPicker onEmojiSelected={handleEmojiSelect} open={isOpenEmoji} onClose={() => setIsOpenEmoji(false)} />
       ) : null}
 
+      <TouchableOpacity onPress={getDailyQuestion}>
+        <Label3>데일리퀘스천 가져오기</Label3>
+      </TouchableOpacity>
       <Container3>
         <StyledTextInput value={comment} onChangeText={(value) => setComment(value)} placeholder={"댓글을 입력하세요."} />
         <TouchableOpacity

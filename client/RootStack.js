@@ -31,8 +31,8 @@ export default function App() {
               {storedCredentials ? (
                 <>
                   <Stack.Screen name="Home" component={Home} />
-                  <Stack.Screen name="Profile" component={Profile} />
                   <Stack.Screen name="MyPage" component={MyPage} />
+                  <Stack.Screen name="Profile" component={Profile} />
                   <Stack.Screen name="Space" component={Space} />
                   <Stack.Screen name="Comment" component={Comment} />
                   <Stack.Screen name="CreateSpace" component={CreateSpace} />

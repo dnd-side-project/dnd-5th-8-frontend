@@ -9,10 +9,11 @@ import { CLIENT_ID_IOS, CLIENT_ID_ANDROID } from "@env";
 
 import axios from "axios";
 
-export default function Login({ navigation }) {
+export default function Login() {
   const [message, setMessage] = useState();
   const [messageType, setMessageType] = useState();
   const [googleSubmitting, setGoogleSubmitting] = useState(false);
+  //const [userId, setUserId] = useState();
 
   const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext);
 
@@ -21,8 +22,11 @@ export default function Login({ navigation }) {
     setMessageType(type);
   };
 
+  const [id, setId] = useState(100);
+
   const handleGoogleSignin = () => {
     setGoogleSubmitting(true);
+
     const config = {
       iosClientId: CLIENT_ID_IOS,
       android: CLIENT_ID_ANDROID,
@@ -35,7 +39,21 @@ export default function Login({ navigation }) {
 
         if (type == "success") {
           const { email, name, photoUrl } = user;
-          persistLogin({ email, name, photoUrl }, "구글 로그인 성공", "SUCCESS");
+          let userId = -1;
+
+          const data = {
+            email: email,
+            nickname: name,
+            profile: photoUrl,
+          };
+
+          axios
+            .post("http://ec2-13-209-36-69.ap-northeast-2.compute.amazonaws.com:8080/user", data)
+            .then((res) => {
+              userId = res.data;
+              persistLogin({ email, name, photoUrl, userId }, "구글 로그인 성공", "SUCCESS");
+            })
+            .catch((err) => alert(err));
         } else {
           handleMessage("구글 로그인 취소");
         }
@@ -52,26 +70,10 @@ export default function Login({ navigation }) {
       .then(() => {
         handleMessage(message, status);
         setStoredCredentials(credentials);
-        alert("로그인 유지 성공");
       })
       .catch((error) => {
         handleMessage("로그인 유지 실패");
-        alert("로그인 유지 실패");
       });
-
-    const data = {
-      nickname: credentials.name,
-      email: credentials.email,
-      profile: credentials.photoUrl,
-    };
-
-    axios
-      .post("http://ec2-13-209-36-69.ap-northeast-2.compute.amazonaws.com:8080/user", data)
-      .then((res) => {
-        alert("로그인 요청 성공");
-        alert(JSON.stringify(res));
-      })
-      .catch((err) => alert(err));
   };
 
   return (

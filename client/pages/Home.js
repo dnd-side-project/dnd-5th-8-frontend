@@ -23,7 +23,7 @@ import { LinearGradient } from "expo-linear-gradient";
 
 export default function Home({ navigation }) {
   const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext);
-  const { name, email, photoUrl } = storedCredentials;
+  const { name, email, photoUrl, userId } = storedCredentials;
 
   console.log("홈페이지에서..", CredentialsContext);
 
