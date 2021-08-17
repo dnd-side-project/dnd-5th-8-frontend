@@ -1,7 +1,10 @@
 import React, { useState, useContext, useEffect } from "react";
-import { StyleSheet, View, Button } from "react-native";
+import { StyleSheet, View, Button, TextInput } from "react-native";
 import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
+
+import { Container, StyledTextInput } from "../components/styles";
+const URL = "http://ec2-13-209-36-69.ap-northeast-2.compute.amazonaws.com:8080";
 
 // Show notifications when the app is in the foreground
 Notifications.setNotificationHandler({
@@ -15,6 +18,11 @@ Notifications.setNotificationHandler({
 });
 
 export default function NotificationTest(props) {
+  const [title, setTitle] = useState();
+  const [body, setBody] = useState();
+  const [token, setToken] = useState();
+  const userId = 9;
+
   useEffect(() => {
     // Permission for iOS
     Permissions.getAsync(Permissions.NOTIFICATIONS)
@@ -36,12 +44,25 @@ export default function NotificationTest(props) {
         return Notifications.getExpoPushTokenAsync();
       })
       .then((response) => {
-        alert(response);
         const deviceToken = response.data;
+        alert(deviceToken);
+        setToken(deviceToken);
+
         console.log({ deviceToken });
+        fetch(`${URL}/notice/token`, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: userId,
+            token: deviceToken,
+          }),
+        });
       })
       .catch((err) => {
-        alert(err);
+        alert(`유즈이펙트 에러:${err}`);
         return null;
       });
 
@@ -93,11 +114,33 @@ export default function NotificationTest(props) {
     });
   };
 
+  const triggerPushNotificationHandler = () => {
+    fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Accept-Encoding": "gzip,deflate",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        to: token,
+        title,
+        body,
+      }),
+    });
+  };
+
   return (
-    <View style={styles.container}>
+    <Container>
       <Button title="Trigger Local Notification" onPress={triggerLocalNotificationHandler} />
+      <View style={{ width: 300, height: 200 }}>
+        <StyledTextInput value={title} placeholder="Title" onChangeText={setTitle} />
+        <StyledTextInput value={body} placeholder="Body" onChangeText={setBody} />
+        <StyledTextInput value={token} placeholder="Token" onChangeText={setToken} />
+        <Button title="Trigger Push Notification" onPress={triggerPushNotificationHandler} />
+      </View>
       <Button onPress={props.navigation.goBack} title="뒤로 가기" />
-    </View>
+    </Container>
   );
 }
 

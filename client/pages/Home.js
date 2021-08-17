@@ -64,7 +64,7 @@ export default function Home({ navigation }) {
 
       <TestButton
         onPress={() => {
-          navigation.navigate("CreateSpace");
+          navigation.navigate("CreateSpace", { credentials: storedCredentials });
         }}
       >
         <Label2>스페이스 생성</Label2>

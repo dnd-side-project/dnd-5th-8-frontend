@@ -17,10 +17,19 @@ export const Colors = {
 export const Container = styled.View`
   flex: 1;
   background: #170c59;
-
   justify-content: center;
   align-items: center;
 `;
+export const MainContainer = styled.View`
+  flex: 1;
+  background: white;
+
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
+`;
+
 export const Container2 = styled.View`
   flex: 1;
   background: #170c59;
@@ -34,6 +43,13 @@ export const Container3 = styled.View`
   margin-bottom: 30px;
 `;
 
+export const MainTitle = styled.Text`
+  position: absolute;
+  top: 130px;
+  left: 20px;
+  font-size: 27px;
+  font-weight: 700;
+`;
 export const Title = styled.Text`
   position: absolute;
   top: 50px;
@@ -48,53 +64,63 @@ export const Title2 = styled.Text`
   color: #d5aaff;
 `;
 
-export const KakaoLoginButton = styled.TouchableOpacity`
-  width: 297px;
-  height: 45px;
-
-  background: #fae100;
-  border-radius: 80px;
-
-  justify-content: center;
-  align-items: center;
-
-  margin-top: 100px;
-`;
-
 export const GoogleLoginButton = styled.TouchableOpacity`
-  width: 297px;
-  height: 45px;
+  width: 90%;
+  height: 55px;
 
-  background: #ffffff;
-  border-radius: 80px;
+  border-radius: 23px;
+  border: 1px solid #efe6fd;
+
+  opacity:1
 
   justify-content: center;
   align-items: center;
 
-  margin-top: 20px;
-`;
+  flex-direction: row;
 
-export const SignUp = styled.TouchableOpacity`
-  justify-content: center;
-  align-items: center;
-
-  margin-top: 20px;
+  position:absolute;
+  bottom:100
+  
 `;
 
 export const StyledTextInput = styled.TextInput`
   flex: 1;
   border-radius: 5px;
   border: 10px solid purple;
+
   font-size: 25px;
   background: white;
+`;
+
+export const MainTextInput = styled.TextInput`
+  width: 100%;
+
+  font-size: 23px;
+  font-weight: 500;
+
+  border: 3px solid #8442fe;
+  border-bottom-color: #8442fe;
+  border-top-color: #00ff0000;
+  border-left-color: #00ff0000;
+  border-right-color: #00ff0000;
+
+  padding: 10px;
 `;
 
 export const SpaceButton = styled.TouchableOpacity`
   width: 80%;
   height: 160px;
+
   justify-content: center;
   align-items: center;
+
   border-radius: 8px;
+`;
+
+export const LabelWhite = styled.Text`
+  font-size: 23px;
+  font-weight: 500;
+  color: white;
 `;
 
 export const Label = styled.Text`
@@ -110,14 +136,13 @@ export const Label3 = styled.Text`
   font-size: 23px;
   font-weight: bold;
   color: #ffffff;
-  margin: 10px;
 `;
 
 export const Avatar = styled.Image`
   width: 100px;
   height: 100px;
   margin: auto;
-  border-radius: 50px;
+  border-radius: 100px;
   border-width: 2px;
   border-color: #e5e7eb;
   margin-bottom: 10px;

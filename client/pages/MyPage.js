@@ -114,7 +114,12 @@ function EditPage(props) {
     });
 
     if (pickerResult.cancelled === false) {
-      alert("사진등록성공?");
+      const credentials = {
+        name: name,
+        email: email,
+        photoUrl: pickerResult.uri,
+      };
+      props.setCredentials(credentials);
       //change image sets
     }
   };
@@ -172,7 +177,7 @@ function EditPage(props) {
 
       <Avatar resizeMode="cover" source={AvatarImg} />
       <Button title="사진 수정" onPress={() => openImagePickerAsync()} />
-      <Label3>{props.name || "Default Name"}</Label3>
+      <Label3>{name || "Default Name"}</Label3>
       <View style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
         <StyledTextInput value={text} onChangeText={(value) => setText(value)} />
         <Button title="X" onPress={() => setText("")} />

@@ -1,8 +1,9 @@
 import React, { useState, useContext, useEffect } from "react";
-import { ActivityIndicator } from "react-native";
+import { ActivityIndicator, Image, View, Text } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Container, Title, GoogleLoginButton, SignUp, Label2, MsgBox } from "../components/styles";
+import { MainTextInput, Container, Title, GoogleLoginButton, SignUp, LabelWhite, MsgBox, Label2 } from "../components/styles";
 import { CredentialsContext } from "../components/CredentialsContext";
+import { StatusBar } from "expo-status-bar";
 
 import * as Google from "expo-google-app-auth";
 import { CLIENT_ID_IOS, CLIENT_ID_ANDROID } from "@env";
@@ -13,7 +14,6 @@ export default function Login() {
   const [message, setMessage] = useState();
   const [messageType, setMessageType] = useState();
   const [googleSubmitting, setGoogleSubmitting] = useState(false);
-  //const [userId, setUserId] = useState();
 
   const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext);
 
@@ -22,14 +22,12 @@ export default function Login() {
     setMessageType(type);
   };
 
-  const [id, setId] = useState(100);
-
   const handleGoogleSignin = () => {
     setGoogleSubmitting(true);
 
     const config = {
       iosClientId: CLIENT_ID_IOS,
-      android: CLIENT_ID_ANDROID,
+      androidClientId: CLIENT_ID_ANDROID,
       scopes: ["profile", "email"],
     };
 
@@ -78,10 +76,15 @@ export default function Login() {
 
   return (
     <Container>
-      <Title>에잇</Title>
+      <View style={{ alignItems: "center", top: -130 }}>
+        <Text style={{ color: "rgba(184, 152, 248, 1)", fontSize: 23, padding: 10 }}>간편하게 로그인하고</Text>
+        <Text style={{ color: "white", fontSize: 27, fontWeight: "bold" }}>우리 가족만의 대화를 나누세요!</Text>
+      </View>
+
       {!googleSubmitting && (
-        <GoogleLoginButton onPress={handleGoogleSignin}>
-          <Label2>구글 계정으로 로그인</Label2>
+        <GoogleLoginButton onPress={handleGoogleSignin} style={{ zIndex: 1 }}>
+          <Image source={require("../assets/google-login.png")} style={{ padding: 10, marginRight: 15 }} />
+          <LabelWhite>Google로 시작</LabelWhite>
         </GoogleLoginButton>
       )}
       {googleSubmitting && (
@@ -90,11 +93,20 @@ export default function Login() {
         </GoogleLoginButton>
       )}
 
-      <SignUp>
-        <Label2 style={{ color: "#ff9c78", textDecorationLine: "underline" }}>이메일로 회원가입</Label2>
-      </SignUp>
+      <View
+        style={{
+          padding: 220,
+          borderRadius: 1000,
+          backgroundColor: "rgba(239, 230, 253, 0.1)",
+
+          position: "absolute",
+          bottom: -150,
+        }}
+      ></View>
 
       <MsgBox type={messageType}>{message}</MsgBox>
+
+      <StatusBar style="light" />
     </Container>
   );
 }

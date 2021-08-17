@@ -28,6 +28,7 @@ const theme = {
   },
   fonts: configureFonts(fontConfig),
 };
+
 export default function App() {
   const [appReady, setAppReady] = useState(false);
   const [storedCredentials, setStoredCredentials] = useState("");
