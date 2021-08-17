@@ -142,10 +142,5 @@ export default function SentMailBox() {
       <Text>그땐 안될것 같아</Text>
       <Text>그땐 안될것 같아</Text>
     </ScrollView>
-    // <ScrollView>
-    //   {sentMails.map(sentMail => {
-    //     <Text>{sentMail}</Text>;
-    //   })}
-    // </ScrollView>
   );
 }

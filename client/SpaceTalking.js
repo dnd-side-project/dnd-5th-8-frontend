@@ -1,12 +1,54 @@
-import * as React from 'react';
-import {Text, View} from 'react-native';
+import React, { useState } from 'react';
 
-export default function SpaceTalking() {
-  return (
-    <>
-      <View>
-        <Text>우주토킹</Text>
-      </View>
-    </>
-  );
+import { StyleSheet, View, Text, Button } from 'react-native';
+
+export default function SpaceTalking ({ navigation }) {
+  const [state, setState] = useState({
+    round: 1,  
+  });
+
+  const { round } = state;
+
+  const reduceRound = () => {
+    if(round === 1){
+      console.log('더 이상 줄일 수 없습니다.');
+      return;
+    }
+    setState({ round: round - 1})
+  }
+
+  const increaseRound = () => setState({ round: round + 1})
+
+    return (
+        <>
+        <View style={styles.container}>
+          <Text>탐사 횟수를 정해주세요.</Text>
+          <Button
+            title = '-'
+            onPress = {reduceRound}
+          />
+          <Text>{round} 라운드</Text>
+          <Button
+            title = '+'
+            onPress = {increaseRound}
+          />
+          </View>
+
+          <Button
+            title="생성하기"
+            onPress={() =>
+              navigation.navigate('WaitPage')
+            }
+          />
+        </>
+    );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

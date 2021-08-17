@@ -1,26 +1,39 @@
 import * as React from 'react';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import CommunicationList from './CommunicatonList';
-import MySpace from './MySpace';
+import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
 import SpaceTalking from './SpaceTalking';
-import DailyQuestion from './DailyQuestion';
-import SpaceLetter from './SpaceLetter';
-import {NavigationContainer} from '@react-navigation/native';
+import CategorySelection from './CategorySelecton';
+import WaitPage from './WaitPage';
+import MainHome from './MainHome';
+import HomePage from './HomePage';
+
+const Stack = createStackNavigator();
 
 export default function App() {
-  const Tab = createBottomTabNavigator();
-
   return (
-    <>
-      <NavigationContainer>
-        <Tab.Navigator initialRouteName="home">
-        <Tab.Screen name="talk" component={SpaceTalking} />
-          <Tab.Screen name="list" component={CommunicationList} />
-          <Tab.Screen name="home" component={DailyQuestion} />
-          <Tab.Screen name="letter" component={SpaceLetter} />
-          <Tab.Screen name="space" component={MySpace} />
-        </Tab.Navigator>
-      </NavigationContainer>
-    </>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen 
+          name="Home" 
+          component={HomePage} 
+        />
+        <Stack.Screen 
+          name="MainHome" 
+          component={MainHome} 
+        />
+        <Stack.Screen 
+          name="WaitPage" 
+          component={WaitPage} 
+        />
+        <Stack.Screen 
+          name="SpaceTalking" 
+          component={SpaceTalking} 
+        />
+        <Stack.Screen 
+          name="CategorySelection" 
+          component={CategorySelection} 
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }

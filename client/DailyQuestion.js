@@ -28,12 +28,12 @@ async function loadQuestion() {
     console.log(response);
 
     const { questionId, questionContent, date } = response;
-    setState({
-      ...state,
-      questionId,
-      questionContent,
-      date,
-    });
+    // setState({
+    //   ...state,
+    //   questionId,
+    //   questionContent,
+    //   date,
+    // });
 };
 
 const handleSheetChanges = useCallback((index) => {
