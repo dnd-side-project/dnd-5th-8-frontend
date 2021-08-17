@@ -4,7 +4,7 @@ import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import { useNavigation } from '@react-navigation/native';
 
-export default function StartTalking() {
+export default function StartTalking({ isParticipant }) {
   const navigation = useNavigation();
   const userId = 1;
   const spaceId = 5;
@@ -24,16 +24,26 @@ export default function StartTalking() {
   
       stompClient.connect({}, () => {
   
-      })
+      });
+      
+      navigation.navigate('SpaceTalking');
   }
 
   return (
     <>
-    <Button
-        title="우주토킹 시작하기!"
+    {isParticipant ? 
+      <Button disabled
+        title="우주토킹 입장하기!"
         onPress={() =>
           navigation.navigate('SpaceTalking')}
-    />
+      />
+      :
+      <Button
+        title="우주토킹 시작하기!"
+        onPress={makeRoom}
+      />
+    }
+    
     <Button
       title="웹 소켓 연결"
       onPress={makeRoom}
