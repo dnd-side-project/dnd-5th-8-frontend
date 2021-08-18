@@ -2,12 +2,30 @@ import React, { useState } from 'react';
 
 import { StyleSheet, View, Text, Button } from 'react-native';
 
-export default function SpaceTalking ({ navigation }) {
+export default function SpaceTalking ({ navigation, route }) {
   const [state, setState] = useState({
     round: 1,  
   });
 
   const { round } = state;
+  const sendRound = () => {
+    // Todo : userId는 추후 코드를 합쳐서 state의 props로 보냄
+    const { userId, spaceId, isParticipant , stompClient } = route.params;
+    
+    if (!isParticipant){
+      const data = {
+        spaceId,
+        userId,
+        round,
+      }
+
+      stompClient.send("/family-talk/round", {},
+      JSON.stringify(data));
+      console.log('round');
+      console.log(stompClient);
+      navigation.navigate('WaitPage', { userId, spaceId, isParticipant ,stompClient, round });
+    }
+  }
 
   const reduceRound = () => {
     if(round === 1){
@@ -36,9 +54,7 @@ export default function SpaceTalking ({ navigation }) {
 
           <Button
             title="생성하기"
-            onPress={() =>
-              navigation.navigate('WaitPage')
-            }
+            onPress={sendRound}
           />
         </>
     );

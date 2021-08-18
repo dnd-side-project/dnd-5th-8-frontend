@@ -6,8 +6,8 @@ import { useNavigation } from '@react-navigation/native';
 
 export default function StartTalking({ isParticipant }) {
   const navigation = useNavigation();
-  const userId = 1;
-  const spaceId = 5;
+  const userId = 11;
+  const spaceId = 23;
 
   const defineIsParticipant = () => {
     const url = `http://ec2-13-209-36-69.ap-northeast-2.compute.amazonaws.com:8080/family-talk/start/${spaceId}`;
@@ -26,7 +26,7 @@ export default function StartTalking({ isParticipant }) {
   
       });
       
-      navigation.navigate('SpaceTalking');
+      navigation.navigate('SpaceTalking', { userId, spaceId, isParticipant ,stompClient });
   }
 
   return (
