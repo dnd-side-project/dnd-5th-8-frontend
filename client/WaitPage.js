@@ -15,31 +15,6 @@ export default function WaitPage ({ navigation, route }) {
       // Todo : 참여하는 새로운 팀원들을 보여줍니다.
     }
 
-    const allowParticipantJoin = () => {
-      const url = `/queue/active/${spaceId}`;
-      stompClient.subscribe(url, function (msg) {
-        if (msg.body) {
-          console.log("got message with body " + message.body);
-        } else {
-          console.log("got empty message");
-        }
-      });
-
-      stompClient.subscribe(`/topic/ready/${spaceId}`, function (msg) { 
-        if (msg.body) {
-          console.log("got message with body " + message.body);
-        } else {
-          console.log("got empty message");
-        }
-      });
-
-      // showNewParticipant(stompClient); // Todo : 함수 완성후 호출
-    }
-
-    useEffect(() => {
-      allowParticipantJoin();
-    },[]);
-
     const renderItem = ({ item }) => (
       <View style={styles.item}>
         <Text style={styles.title}>{item.title}</Text>

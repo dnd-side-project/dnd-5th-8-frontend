@@ -22,12 +22,12 @@ export default function App() {
           component={MainHome} 
         />
         <Stack.Screen 
-          name="WaitPage" 
-          component={WaitPage} 
-        />
-        <Stack.Screen 
           name="SpaceTalking" 
           component={SpaceTalking} 
+        />
+        <Stack.Screen 
+          name="WaitPage" 
+          component={WaitPage} 
         />
         <Stack.Screen 
           name="CategorySelection" 

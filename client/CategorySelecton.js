@@ -2,7 +2,9 @@ import * as React from 'react';
 
 import { Text, View, Button } from 'react-native';
 
-export default function CategorySelection () {
+export default function CategorySelection ( route ) {
+    const { userId, spaceId, isParticipant ,stompClient, round } = route.params;
+    //stompClient.send('/family-talk/round', {},JSON.stringify(data));
     const sendCategory = () => {
         //Todo : 서버에 카테고리들 보내기
     }

@@ -6,9 +6,7 @@ export default function HomePage({ navigation }) {
     <>
     <Button
       title="메인홈 이동"
-      onPress={() =>
-        navigation.navigate('MainHome')
-      }
+      onPress={() => navigation.navigate('MainHome')}
     />
     </>
   );

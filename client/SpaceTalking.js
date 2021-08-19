@@ -8,23 +8,20 @@ export default function SpaceTalking ({ navigation, route }) {
   });
 
   const { round } = state;
+  const { userId, spaceId, isParticipant , stompClient } = route.params;
+
   const sendRound = () => {
     // Todo : userId는 추후 코드를 합쳐서 state의 props로 보냄
-    const { userId, spaceId, isParticipant , stompClient } = route.params;
-    
-    if (!isParticipant){
-      const data = {
-        spaceId,
-        userId,
-        round,
-      }
 
-      stompClient.send("/family-talk/round", {},
-      JSON.stringify(data));
-      console.log('round');
-      console.log(stompClient);
-      navigation.navigate('WaitPage', { userId, spaceId, isParticipant ,stompClient, round });
+    const data = {
+      spaceId,
+      userId,
+      round,
     }
+
+    stompClient.send("/family-talk/round", {},
+      JSON.stringify(data));
+    navigation.navigate('WaitPage', { userId, spaceId, isParticipant ,stompClient, round });
   }
 
   const reduceRound = () => {
