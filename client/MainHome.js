@@ -46,7 +46,7 @@ const makeRoom = () => {
       if (msg.body) {
         const response = JSON.parse(msg.body);
         console.log("got message : " + response);
-        const { nickName, profile } = response; 
+        const { nickName, profile } = response[0]; 
         console.log("nickName : " + nickName);      
         console.log("profile : " + profile);      
         setState({
