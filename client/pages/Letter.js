@@ -18,7 +18,7 @@ import {
 
 import { CredentialsContext } from "../components/CredentialsContext";
 import axios from "axios";
-import { MainContainer, Title, Comments, Label3, SpaceButton, StyledTextInput, Container2 } from "../components/styles";
+import { Avatar, MainContainer, Title, Comments, Label3, SpaceButton, StyledTextInput, Container2 } from "../components/styles";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 import styled from "styled-components";
@@ -39,7 +39,7 @@ const Width = Dimensions.get("window").width;
 const Height = Dimensions.get("window").height;
 
 const NewLetterBox = styled.View`
-  background: ${colorSet[randomNumber]};
+  background: ${Colors.lilac};
   width: 90%;
   height: 270;
   border-radius: 8;
@@ -48,19 +48,41 @@ const NewLetterBox = styled.View`
 const Tab = createMaterialTopTabNavigator();
 
 function ReceiveBox(props) {
+  const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext);
+  const { name, email, photoUrl, userId, space, spaceId } = storedCredentials;
   const [userList, setUserList] = useState([]);
-  const [letterList, setLetterList] = useState([1, 2, 3, 4, 5]);
+  const [letterList, setLetterList] = useState([]);
   const [newLetter, setNewLetter] = useState(false);
 
+  useEffect(() => {
+    axios
+      .get(`${URL}/letter/recieve/${userId}/${spaceId}`)
+      .then((res) => {
+        setUserList(res.data.family);
+        setLetterList(res.data.recieveletter);
+      })
+      .catch((err) => alert(err));
+  }, []);
+
   return (
-    <View
-      style={{ flex: 1, width: Width, justifyContent: "center", alignItems: "center", backgroundColor: "white", paddingTop: 100 }}
-    >
+    <View style={{ width: Width, justifyContent: "center", alignItems: "center", backgroundColor: "white", paddingTop: 10 }}>
+      <FlatList
+        style={{ width: Width, paddingHorizontal: 20, paddingBottom: 10 }}
+        horizontal={true}
+        data={userList}
+        renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => props.navigation.navigate("DetailLetter")}>
+            <Avatar resizeMode="cover" source={{ uri: item.profile }} style={{ width: 60, height: 60 }} />
+          </TouchableOpacity>
+        )}
+        // keyExtractor={(item) => String(item.id)}
+      />
+
       <FlatList
         data={letterList}
-        renderItem={({ letter }) => (
+        renderItem={({ item }) => (
           <TouchableOpacity onPress={() => props.navigation.navigate("DetailLetter")}>
-            <View style={{ width: Width, alignItems: "center", marginBottom: 20 }}>
+            <View style={{ width: Width, alignItems: "center" }}>
               <NewLetterBox>
                 <Image
                   source={require("../assets/letter.png")}
@@ -79,6 +101,8 @@ function ReceiveBox(props) {
                 >
                   <Text style={{ color: "white", fontSize: 20, fontWeight: "700", textAlign: "center" }}>NEW</Text>
                 </View>
+                <Text>{item.recieveNickname}에게 온 편지</Text>
+                <Text>{item.content}</Text>
               </NewLetterBox>
             </View>
           </TouchableOpacity>
@@ -89,21 +113,35 @@ function ReceiveBox(props) {
   );
 }
 function SendBox() {
-  const [userList, setUserList] = useState([]);
-  const [letterList, setLetterList] = useState([1, 2, 3]);
+  const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext);
+  const { name, email, photoUrl, userId } = storedCredentials;
+
+  const [letterList, setLetterList] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(`${URL}/letter/send/${userId}`)
+      .then((res) => {
+        setLetterList(res.data);
+      })
+      .catch((err) => alert(err));
+  }, []);
+
   return (
     <View
       style={{ flex: 1, width: Width, justifyContent: "center", alignItems: "center", backgroundColor: "white", paddingTop: 100 }}
     >
       <FlatList
         data={letterList}
-        renderItem={({ letter }) => (
+        renderItem={({ item }) => (
           <View style={{ width: Width, alignItems: "center", marginBottom: 20 }}>
             <NewLetterBox>
               <Image
                 source={require("../assets/letter.png")}
                 style={{ position: "absolute", top: 20, left: 23, padding: 60, paddingHorizontal: 170 }}
               />
+              <Text style={{ fontSize: 30 }}>{item.toNickname}에게 보낸 편지</Text>
+              <Text style={{ fontSize: 25 }}>{item.content}</Text>
               <View
                 style={{
                   width: 70,
@@ -149,8 +187,9 @@ function Tabs({ navigation }) {
 
 const URL = "http://ec2-13-209-36-69.ap-northeast-2.compute.amazonaws.com:8080";
 
-export default function Letter(props, { navigation }) {
-  const { name, email, photoUrl, userId } = props.route.params.credentials;
+export default function Letter({ navigation }) {
+  const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext);
+  const { name, email, photoUrl, userId, space, spaceId } = storedCredentials;
 
   const [title, setTitle] = useState();
   const [body, setBody] = useState();
@@ -160,10 +199,6 @@ export default function Letter(props, { navigation }) {
   const [showReceive, setShowReceive] = useState(false);
 
   const [letterList, setLetterList] = useState(["편지1", "편지2"]);
-
-  useEffect(() => {
-    axios.get(`${URL}/letter/recieve/${userId}/`);
-  }, []);
 
   return (
     <>
@@ -194,41 +229,3 @@ export default function Letter(props, { navigation }) {
     </>
   );
 }
-
-// function SendPage(props) {
-//   const [content, setContent] = useState("");
-//   const [valid, setValid] = useState(false);
-
-//   useEffect(() => {
-//     if (content.trim().length !== 0) {
-//       setValid(true);
-//     } else setValid(false);
-//   }, [content]);
-//   return (
-//     <MainContainer>
-//       <Label3>{}에게</Label3>
-
-//       <StyledTextInput
-//         style={{ width: 300, height: 200 }}
-//         multiline={true}
-//         numberOfLines={5}
-//         value={content}
-//         onChangeText={(value) => {
-//           setContent(value);
-//         }}
-//         placeholder="편지에 마음을 담아보세요."
-//       />
-//       {valid ? (
-//         <TouchableOpacity disabled={!content}>
-//           <Label3>보내기 가능</Label3>
-//         </TouchableOpacity>
-//       ) : (
-//         <TouchableOpacity disabled={!content}>
-//           <Label3>보내기 불가</Label3>
-//         </TouchableOpacity>
-//       )}
-
-//       <Button title="뒤로 가기" onPress={props.setShow(false)} />
-//     </MainContainer>
-//   );
-// }

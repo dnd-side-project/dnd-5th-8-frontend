@@ -49,7 +49,7 @@ export default function SendLetter({ navigation }) {
   const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext);
   const { name, email, photoUrl, userId } = storedCredentials;
 
-  const [toId, setToId] = useState(9);
+  const [toId, setToId] = useState(10);
   const [fromId, setFromId] = useState(userId);
   const [content, setContent] = useState("");
 
@@ -72,7 +72,7 @@ export default function SendLetter({ navigation }) {
         <Image source={require("../assets/back.png")} style={{ padding: 10 }} />
       </TouchableOpacity>
 
-      <Text style={{ fontSize: "23", marginBottom: 30, marginLeft: 20, alignSelf: "start" }}>{}에게</Text>
+      <Text style={{ fontSize: 23, marginBottom: 30, marginLeft: 20, alignSelf: "start" }}>{}에게</Text>
       <TextInput
         multiline={true}
         numberOfLines={100}
@@ -92,8 +92,7 @@ export default function SendLetter({ navigation }) {
 
       <TouchableOpacity onPress={handleSendLetter} style={{ width: "100%", alignItems: "center" }} disabled={!content}>
         <LinearGradient
-          colors={["#8743FF", "#4136F1"]}
-          start={{ x: 1, y: 0 }}
+          colors={["#3C0CE3", "#3C0CE3"]}
           style={{
             width: "90%",
             height: 55,

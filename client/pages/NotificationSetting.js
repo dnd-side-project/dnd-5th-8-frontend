@@ -34,8 +34,28 @@ const Width = Dimensions.get("window").width;
 const Height = Dimensions.get("window").height;
 
 export default function NotificationSetting(props) {
-  const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+  const [isEnabledGame, setIsEnabledGame] = useState(false);
+  const [isEnabledCommunication, setIsEnabledCommnunication] = useState(false);
+  const [isEnabledComment, setIsEnabledComment] = useState(false);
+  const [isEnabledLetter, setIsEnabledLetter] = useState(false);
+  const toggleSwitch = (number) => {
+    switch (number) {
+      case 1:
+        setIsEnabledGame((previousState) => !previousState);
+        break;
+      case 2:
+        setIsEnabledCommnunication((previousState) => !previousState);
+        break;
+      case 3:
+        setIsEnabledComment((previousState) => !previousState);
+        break;
+      case 4:
+        setIsEnabledLetter((previousState) => !previousState);
+        break;
+      default:
+        break;
+    }
+  };
 
   const [title, setTitle] = useState();
   const [body, setBody] = useState();
@@ -163,7 +183,7 @@ export default function NotificationSetting(props) {
       >
         <Text style={{ color: "white", fontSize: 23, fontWeight: "700", textAlign: "center", top: 77 }}>알림 설정</Text>
 
-        <TouchableOpacity onPress={() => props.navigation.goBack()} style={{ position: "absolute", top: 80, right: 30 }}>
+        <TouchableOpacity onPress={() => props.navigation.goBack()} style={{ position: "absolute", top: 80, left: 30 }}>
           <Image source={require("../assets/back-arrow.png")} />
         </TouchableOpacity>
       </View>
@@ -192,7 +212,7 @@ export default function NotificationSetting(props) {
         }}
       >
         <Text style={{ fontSize: 20, fontWeight: "600" }}>게임 시작 알림</Text>
-        <Switch trackColor={{ false: "#CFD3FF", true: "#424CC1" }} onValueChange={toggleSwitch} value={isEnabled} />
+        <Switch trackColor={{ false: "#CFD3FF", true: "#424CC1" }} onValueChange={() => toggleSwitch(1)} value={isEnabledGame} />
       </View>
 
       <Text
@@ -219,7 +239,11 @@ export default function NotificationSetting(props) {
         }}
       >
         <Text style={{ fontSize: 20, fontWeight: "500" }}>도착 알림</Text>
-        <Switch trackColor={{ false: "#CFD3FF", true: "#424CC1" }} onValueChange={toggleSwitch} value={isEnabled} />
+        <Switch
+          trackColor={{ false: "#CFD3FF", true: "#424CC1" }}
+          onValueChange={() => toggleSwitch(2)}
+          value={isEnabledCommunication}
+        />
       </View>
       <View
         style={{
@@ -235,7 +259,11 @@ export default function NotificationSetting(props) {
         }}
       >
         <Text style={{ fontSize: 20, fontWeight: "5 00" }}>댓글 알림</Text>
-        <Switch trackColor={{ false: "#CFD3FF", true: "#424CC1" }} onValueChange={toggleSwitch} value={isEnabled} />
+        <Switch
+          trackColor={{ false: "#CFD3FF", true: "#424CC1" }}
+          onValueChange={() => toggleSwitch(3)}
+          value={isEnabledComment}
+        />
       </View>
 
       <Text
@@ -263,7 +291,11 @@ export default function NotificationSetting(props) {
         }}
       >
         <Text style={{ fontSize: 20, fontWeight: "600" }}>편지 도착 알림</Text>
-        <Switch trackColor={{ false: "#CFD3FF", true: "#424CC1" }} onValueChange={toggleSwitch} value={isEnabled} />
+        <Switch
+          trackColor={{ false: "#CFD3FF", true: "#424CC1" }}
+          onValueChange={() => toggleSwitch(4)}
+          value={isEnabledLetter}
+        />
       </View>
 
       <StatusBar style="light" />

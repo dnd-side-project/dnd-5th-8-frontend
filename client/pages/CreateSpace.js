@@ -85,8 +85,7 @@ export default function CreateSpace({ navigation }) {
         disabled={!spaceName}
       >
         <LinearGradient
-          colors={["#8743FF", "#4136F1"]}
-          start={{ x: 1, y: 0 }}
+          colors={["#3C0CE3", "#3C0CE3"]}
           style={{
             width: "90%",
             height: 55,

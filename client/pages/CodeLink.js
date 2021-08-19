@@ -31,9 +31,18 @@ import { Snackbar } from "react-native-paper";
 const URL = "http://ec2-13-209-36-69.ap-northeast-2.compute.amazonaws.com:8080";
 
 export default function CodeLink(props) {
+  const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext);
+  const { name, email, photoUrl, userId, space } = storedCredentials;
+  const [spaceName, setSpaceName] = useState("");
+
+  useEffect(() => {
+    axios.get(`${URL}/space/attend/${space}`).then((res) => setSpaceName(res.data.spaceName));
+  }, []);
+
   const copyToClipboard = () => {
-    Clipboard.setString(props.spaceCode);
+    Clipboard.setString(space);
   };
+
   return (
     <MainContainer>
       <View
@@ -49,7 +58,7 @@ export default function CodeLink(props) {
       >
         <Text style={{ color: "white", fontSize: 23, fontWeight: "700", textAlign: "center", top: 77 }}>가족 코드</Text>
 
-        <TouchableOpacity onPress={() => props.navigation.goBack()} style={{ position: "absolute", top: 80, right: 30 }}>
+        <TouchableOpacity onPress={() => props.navigation.goBack()} style={{ position: "absolute", top: 80, left: 30 }}>
           <Image source={require("../assets/back-arrow.png")} />
         </TouchableOpacity>
       </View>
@@ -74,7 +83,7 @@ export default function CodeLink(props) {
             borderRadius: 8,
 
             backgroundColor: "#ffffff",
-            shadowColor: "#000",
+            shadowColor: "gray",
             shadowOffset: {
               width: 0,
               height: 3,
@@ -89,8 +98,8 @@ export default function CodeLink(props) {
           }}
         >
           <Image source={require("../assets/space-icon.png")} style={{ padding: 10 }} />
-          <Text style={{ fontSize: 23, marginTop: 15, marginBottom: 50 }}>{props.name} 스페이스</Text>
-          <Text style={{ fontSize: 45, fontWeight: "450", marginBottom: 70 }}>{props.code}</Text>
+          <Text style={{ fontSize: 23, fontWeight: "400", marginTop: 15, marginBottom: 50 }}>{spaceName} 스페이스</Text>
+          <Text style={{ fontSize: 45, fontWeight: "500", marginBottom: 70 }}>{space}</Text>
           <TouchableOpacity
             onPress={() => {
               copyToClipboard();

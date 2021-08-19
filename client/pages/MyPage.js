@@ -60,10 +60,6 @@ export default function MyPage(props) {
         }}
       >
         <Text style={{ color: "white", fontSize: 23, fontWeight: "700", textAlign: "center", top: 77 }}>MY</Text>
-
-        <TouchableOpacity onPress={() => props.navigation.goBack()} style={{ position: "absolute", top: 80, right: 30 }}>
-          <Image source={require("../assets/back-arrow.png")} />
-        </TouchableOpacity>
       </View>
 
       <TouchableOpacity
@@ -119,14 +115,17 @@ export default function MyPage(props) {
 
       <TouchableOpacity
         onPress={() => clearLogin()}
-        style={{ width: "90%", padding: 20, marginVertical: 10, borderBottomWidth: 2, borderBottomColor: "#F2F4F8" }}
+        style={{
+          width: "90%",
+          padding: 20,
+          marginVertical: 10,
+          marginBottom: 70,
+          borderBottomWidth: 2,
+          borderBottomColor: "#F2F4F8",
+        }}
       >
         <Text style={{ fontSize: 20, color: "red" }}>로그아웃</Text>
       </TouchableOpacity>
-
-      <TestButton onPress={props.navigation.goBack} style={{ bottom: -200 }}>
-        <Label2>뒤로 가기</Label2>
-      </TestButton>
 
       <StatusBar style="light" />
     </MainContainer>

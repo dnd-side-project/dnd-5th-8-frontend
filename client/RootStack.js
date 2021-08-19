@@ -11,10 +11,12 @@ import Space from "./pages/Space";
 import CreateSpace from "./pages/CreateSpace";
 import FinishCreateSpace from "./pages/FinishCreateSpace";
 import JoinSpace from "./pages/JoinSpace";
+import FinishInputCode from "./pages/FinishInputCode";
 import Home from "./pages/Home";
 import MyPage from "./pages/MyPage";
 import Profile from "./pages/Profile";
 import QuestionList from "./pages/QuestionList";
+import AnswerComment from "./pages/AnswerComment";
 import Comment from "./pages/Comment";
 import EditProfile from "./pages/EditProfile";
 import CodeLink from "./pages/CodeLink";
@@ -46,18 +48,17 @@ export default function RootStack() {
               <>
                 <Stack.Screen name="Home" component={Home} />
                 <Stack.Screen name="MyPage" component={MyPage} />
-
-                {/* <Stack.Screen name="Letter" component={Letter} />
+                <Stack.Screen name="Letter" component={Letter} />
                 <Stack.Screen name="SendLetter" component={SendLetter} />
                 <Stack.Screen name="DetailLetter" component={DetailLetter} />
-                <Stack.Screen name="Home" component={Home} />
                 <Stack.Screen name="EditProfile" component={EditProfile} />
                 <Stack.Screen name="CodeLink" component={CodeLink} />
                 <Stack.Screen name="NotificationSetting" component={NotificationSetting} />
                 <Stack.Screen name="QuestionList" component={QuestionList} />
+                <Stack.Screen name="AnswerComment" component={AnswerComment} />
                 <Stack.Screen name="Comment" component={Comment} />
                 <Stack.Screen name="Profile" component={Profile} />
-                <Stack.Screen name="BottomSheet" component={BottomSheet} /> */}
+                <Stack.Screen name="BottomSheet" component={BottomSheet} />
               </>
             ) : (
               <>
@@ -68,9 +69,7 @@ export default function RootStack() {
                     <Stack.Screen name="CreateSpace" component={CreateSpace} />
                     <Stack.Screen name="FinishCreateSpace" component={FinishCreateSpace} />
                     <Stack.Screen name="JoinSpace" component={JoinSpace} />
-
-                    {/* <Stack.Screen name="Home" component={Home} />
-                    <Stack.Screen name="MyPage" component={MyPage} /> */}
+                    <Stack.Screen name="FinishInputCode" component={FinishInputCode} />
                   </>
                 ) : (
                   <Stack.Screen name="Login" component={Login} />

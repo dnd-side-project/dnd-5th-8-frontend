@@ -30,8 +30,19 @@ import { Snackbar } from "react-native-paper";
 
 const URL = "http://ec2-13-209-36-69.ap-northeast-2.compute.amazonaws.com:8080";
 
-export default function QuestionList(props) {
-  const [questionList, setQuestionList] = useState([1, 2, 3]);
+export default function QuestionList({ navigation }) {
+  const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext);
+  const { name, email, photoUrl, userId, space, spaceId } = storedCredentials;
+
+  const [questionList, setQuestionList] = useState([1, 2]);
+
+  useEffect(() => {
+    axios
+      .get(`${URL}/daily-questions/list/space/${spaceId}`)
+      .then((res) => setQuestionList(res.data))
+      .catch((err) => alert("통신 목록을 불러오지 못했습니다."));
+  }, [questionList]);
+
   return (
     <MainContainer>
       <View
@@ -46,48 +57,56 @@ export default function QuestionList(props) {
         }}
       >
         <Text style={{ color: "white", fontSize: 23, fontWeight: "700", textAlign: "center", top: 77 }}>통신 목록</Text>
-
-        <TouchableOpacity onPress={() => props.navigation.goBack()} style={{ position: "absolute", top: 80, right: 30 }}>
-          <Image source={require("../assets/back-arrow.png")} />
-        </TouchableOpacity>
       </View>
 
-      <FlatList
-        style={{
-          width: "100%",
-          top: 120,
-        }}
-        data={questionList}
-        renderItem={({ question }) => (
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              width: "95%",
+      {questionList.length ? (
+        <FlatList
+          style={{
+            width: "100%",
+            top: 120,
+          }}
+          data={questionList}
+          renderItem={({ question }) => (
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                width: "95%",
 
-              padding: 10,
-              marginVertical: 5,
-              marginLeft: 10,
+                padding: 10,
+                marginVertical: 5,
+                marginLeft: 10,
 
-              borderWidth: 2,
-              borderColor: "#F2F4F8",
-              borderRadius: 8,
-            }}
-          >
-            <View>
-              <Text style={{ fontSize: 20, fontWeight: "600" }}>치킨 피자</Text>
-              <Text style={{ color: "#B7B7B7", paddingTop: 10 }}>2021.1.1</Text>
+                borderWidth: 2,
+                borderColor: "#F2F4F8",
+                borderRadius: 8,
+              }}
+            >
+              <View>
+                <Text style={{ fontSize: 20, fontWeight: "600" }}>치킨 피자</Text>
+                <Text style={{ color: "#B7B7B7", paddingTop: 10 }}>2021.1.1</Text>
+              </View>
+
+              <TouchableOpacity
+                onPress={() => navigation.navigate("AnswerComment", { questionId: 0 })}
+                style={{ height: "100%", backgroundColor: "#F0E0FF", padding: 15, borderRadius: 8 }}
+              >
+                <Text style={{ color: "#7C58FF", fontSize: 15 }}>댓글</Text>
+              </TouchableOpacity>
             </View>
-
-            <TouchableOpacity style={{ height: "100%", backgroundColor: "#F0E0FF", padding: 15, borderRadius: 8 }}>
-              <Text style={{ color: "#7C58FF", fontSize: 15 }}>댓글</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-        // keyExtractor={(item) => String(item.id)}
-      />
-
+          )}
+          // keyExtractor={(item) => String(item.id)}
+        />
+      ) : (
+        <View style={{ width: "100%", alignItems: "center" }}>
+          <Image source={require("../assets/nothing.png")} style={{ padding: 110 }} />
+          <Text style={{ color: "#BFC3CF", fontSize: 23, fontWeight: "600", padding: 20, paddingTop: 70 }}>
+            아직 생성된 통신이 없어요
+          </Text>
+          <Text style={{ color: "#BFC3CF", fontSize: 18, fontWeight: "500", marginBottom: 200 }}>내일 만나요!</Text>
+        </View>
+      )}
       <StatusBar style="light" />
     </MainContainer>
   );

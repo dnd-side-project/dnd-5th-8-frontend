@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { TouchableOpacity, Image, Text, View, Clipboard, Button, Switch } from "react-native";
+import { TouchableOpacity, Image, Text, View, FlatList, Button, Switch } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { CredentialsContext } from "../components/CredentialsContext";
 
@@ -30,7 +30,7 @@ import { Snackbar } from "react-native-paper";
 
 const URL = "http://ec2-13-209-36-69.ap-northeast-2.compute.amazonaws.com:8080";
 
-export default function QuestionList(props) {
+export default function AnswerComment(props) {
   return (
     <MainContainer>
       <FlatList

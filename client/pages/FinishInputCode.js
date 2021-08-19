@@ -21,16 +21,13 @@ import { LinearGradient } from "expo-linear-gradient";
 
 const URL = "http://ec2-13-209-36-69.ap-northeast-2.compute.amazonaws.com:8080";
 
-export default function CreateSpace(props) {
+export default function FinishInputCode(props) {
   const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext);
   const { name, email, photoUrl, userId, space } = storedCredentials;
+  let count = props.route.params.userCount - 1;
 
-  const copyToClipboard = () => {
-    Clipboard.setString(props.spaceCode);
-  };
-
-  const handleFinish = () => {
-    const credentials = { email, name, photoUrl, userId, space: props.route.params.code };
+  const handleJoin = () => {
+    const credentials = { email, name, photoUrl, userId, space: props.route.params.spaceCode };
 
     AsyncStorage.setItem("EightCredentials", JSON.stringify(credentials))
       .then(() => {
@@ -42,7 +39,7 @@ export default function CreateSpace(props) {
   return (
     <LinearGradient
       colors={["#EAF3FE", "rgba(239, 235, 255, 0.03625)"]}
-      start={{ x: 0, y: 1 }}
+      start={{ x: 1, y: 1 }}
       style={{
         flex: 1,
         justifyContent: "center",
@@ -50,8 +47,9 @@ export default function CreateSpace(props) {
         position: "relative",
       }}
     >
-      <MainTitle>스페이스 생성 완료!{"\n"}코드로 가족들을 초대해주세요.</MainTitle>
-
+      <MainTitle>
+        {props.route.params.roomMaster}님의{"\n"}가족이 맞나요?
+      </MainTitle>
       <View
         style={{
           width: "90%",
@@ -62,7 +60,7 @@ export default function CreateSpace(props) {
           borderRadius: 8,
 
           backgroundColor: "#ffffff",
-          shadowColor: "#000",
+          shadowColor: "gray",
           shadowOffset: {
             width: 0,
             height: 3,
@@ -77,44 +75,47 @@ export default function CreateSpace(props) {
         }}
       >
         <Image source={require("../assets/space-icon.png")} style={{ padding: 10 }} />
-        <Text style={{ fontSize: 23, marginTop: 15, marginBottom: 50 }}>{props.route.params.name} 스페이스</Text>
-        <Text style={{ fontSize: 45, fontWeight: "400", marginBottom: 70 }}>{props.route.params.code}</Text>
-        <TouchableOpacity
-          onPress={() => {
-            copyToClipboard();
-          }}
-          style={{
-            width: "90%",
-            padding: 15,
-            borderRadius: 8,
-            borderWidth: "1",
-            borderStyle: "solid",
-            borderColor: "#8743ff",
-          }}
-        >
-          <Text style={{ fontSize: 15, fontWeight: "bold", textAlign: "center", color: "#8743ff" }}>코드 복사</Text>
+
+        <Text style={{ fontSize: 23, marginTop: 15, marginBottom: 10 }}>{props.route.params.spaceName} 스페이스</Text>
+
+        {count ? (
+          <Text style={{ fontSize: 17, marginBottom: 90, color: "gray" }}>
+            {props.route.params.roomMaster}님 외 {count}참가 중
+          </Text>
+        ) : (
+          <Text style={{ fontSize: 17, marginBottom: 90, color: "gray" }}>{props.route.params.roomMaster}님 참가 중</Text>
+        )}
+
+        <TouchableOpacity onPress={handleJoin} style={{ width: "100%", alignItems: "center" }}>
+          <LinearGradient
+            colors={["#8743FF", "#4136F1"]}
+            start={{ x: 1, y: 0 }}
+            style={{
+              width: "90%",
+              height: 50,
+              borderRadius: 8,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: "600",
+                color: "white",
+              }}
+            >
+              우리 가족이 맞아요!
+            </Text>
+          </LinearGradient>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => props.navigation.goBack()} style={{ padding: 15 }}>
+          <Text style={{ fontSize: 20, fontWeight: "500", color: "gray" }}>이전 화면으로</Text>
         </TouchableOpacity>
       </View>
-
-      <TouchableOpacity onPress={handleFinish} style={{ width: "100%", alignItems: "center", position: "absolute", bottom: 50 }}>
-        <LinearGradient
-          colors={["#8743FF", "#4136F1"]}
-          start={{ x: 1, y: 0 }}
-          style={{
-            width: "90%",
-            height: 55,
-            borderRadius: 8,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Label3>완료</Label3>
-        </LinearGradient>
-      </TouchableOpacity>
 
       <StatusBar style="dark" />
     </LinearGradient>
   );
 }
-
-function FinishCreateSpace(props) {}
