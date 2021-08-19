@@ -11,11 +11,10 @@ import { CLIENT_ID_IOS, CLIENT_ID_ANDROID } from "@env";
 import axios from "axios";
 
 export default function Login() {
+  const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext);
   const [message, setMessage] = useState();
   const [messageType, setMessageType] = useState();
   const [googleSubmitting, setGoogleSubmitting] = useState(false);
-
-  const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext);
 
   const handleMessage = (message, type = "") => {
     setMessage(message);
@@ -49,7 +48,8 @@ export default function Login() {
             .post("http://ec2-13-209-36-69.ap-northeast-2.compute.amazonaws.com:8080/user", data)
             .then((res) => {
               userId = res.data;
-              persistLogin({ email, name, photoUrl, userId }, "구글 로그인 성공", "SUCCESS");
+              let space = false;
+              persistLogin({ email, name, photoUrl, userId, space }, "구글 로그인 성공", "SUCCESS");
             })
             .catch((err) => alert(err));
         } else {
@@ -76,7 +76,13 @@ export default function Login() {
 
   return (
     <Container>
-      <View style={{ alignItems: "center", top: -130 }}>
+      <Image
+        source={require("../assets/main.png")}
+        style={{ position: "absolute", height: 1, paddingTop: 500, top: 100, zIndex: -1 }}
+      />
+
+      <View style={{ alignItems: "center", top: -170 }}>
+        <Image source={require("../assets/logo.png")} style={{ marginBottom: 20 }} />
         <Text style={{ color: "rgba(184, 152, 248, 1)", fontSize: 23, padding: 10 }}>간편하게 로그인하고</Text>
         <Text style={{ color: "white", fontSize: 27, fontWeight: "bold" }}>우리 가족만의 대화를 나누세요!</Text>
       </View>

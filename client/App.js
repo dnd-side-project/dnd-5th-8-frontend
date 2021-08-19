@@ -36,6 +36,7 @@ export default function App() {
   const checkLoginCredentials = () => {
     AsyncStorage.getItem("EightCredentials")
       .then((result) => {
+        console.log("로그인체크..", result);
         if (result !== null) {
           setStoredCredentials(JSON.parse(result));
         } else {

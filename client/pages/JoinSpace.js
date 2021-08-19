@@ -30,6 +30,15 @@ export default function Join({ navigation }) {
   const [userCount, setUserCount] = useState(0);
 
   const [finished, setFinished] = useState(false);
+  const [reset, setReset] = useState(false);
+
+  useEffect(() => {
+    if (spaceCode.trim().length !== 0) {
+      setReset(true);
+    } else {
+      setReset(false);
+    }
+  }, [spaceCode]);
 
   const handleDeleteText = () => {
     setSpaceCode("");
@@ -40,10 +49,13 @@ export default function Join({ navigation }) {
       .get(`${URL}/space/attend/${spaceCode}`)
       .then((res) => {
         console.log(JSON.stringify(res));
-        setSpaceName(res.data.spaceName);
-        setUserCount(res.data.userCount);
-
-        setFinished(true);
+        if (res.data.isExist === true) {
+          setSpaceName(res.data.spaceName);
+          setUserCount(res.data.userCount);
+          setFinished(true);
+        } else {
+          alert("스페이스가 존재하지 않습니다.");
+        }
       })
       .catch((err) => alert(`스페이스 참가 에러${err}`));
   };
@@ -51,9 +63,13 @@ export default function Join({ navigation }) {
   return (
     <>
       {finished ? (
-        <FinishCreateSpace name={name} spaceName={spaceName} code={spaceCode} count={userCount} />
+        <FinishInputCode name={name} spaceName={spaceName} code={spaceCode} count={userCount} navigation={navigation} />
       ) : (
         <MainContainer>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={{ position: "absolute", top: 80, right: 20 }}>
+            <Text style={{ fontSize: 18, color: "gray" }}>뒤로 가기</Text>
+          </TouchableOpacity>
+
           <MainTitle>가족이 알려준{"\n"}초대 코드를 입력해주세요.</MainTitle>
 
           <View style={{ flexDirection: "row", position: "relative" }}>
@@ -63,15 +79,21 @@ export default function Join({ navigation }) {
               style={{ width: "90%", top: -150 }}
               placeholder="초대 코드"
             />
-            <TouchableOpacity onPress={() => handleDeleteText()}>
-              <Image source={require("../assets/close.png")} style={{ position: "absolute", padding: 10, top: -130, right: 5 }} />
-            </TouchableOpacity>
+
+            {reset ? (
+              <TouchableOpacity onPress={() => handleDeleteText()}>
+                <Image
+                  source={require("../assets/close.png")}
+                  style={{ position: "absolute", padding: 10, top: -130, right: 5 }}
+                />
+              </TouchableOpacity>
+            ) : null}
           </View>
 
           <TouchableOpacity
             onPress={handleJoin}
             style={{ width: "100%", alignItems: "center", position: "absolute", bottom: 50 }}
-            disabled={!code}
+            disabled={!spaceCode}
           >
             <LinearGradient
               colors={["#8743FF", "#4136F1"]}
@@ -95,7 +117,7 @@ export default function Join({ navigation }) {
     </>
   );
 }
-function FinishCreateSpace(props) {
+function FinishInputCode(props) {
   let count = props.count - 1;
 
   const copyToClipboard = () => {
@@ -103,7 +125,16 @@ function FinishCreateSpace(props) {
   };
 
   return (
-    <MainContainer>
+    <LinearGradient
+      colors={["#EAF3FE", "rgba(239, 235, 255, 0.03625)"]}
+      start={{ x: 0, y: 1 }}
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        position: "relative",
+      }}
+    >
       <MainTitle>
         {props.name}님의{"\n"}가족이 맞나요?
       </MainTitle>
@@ -126,18 +157,21 @@ function FinishCreateSpace(props) {
           shadowRadius: 4.65,
           elevation: 6,
 
-          paddingTop: 50,
+          paddingTop: 30,
           paddingBottom: 20,
           marginBottom: 100,
         }}
       >
-        <Text style={{ fontSize: 30, marginBottom: 10 }}>{props.spaceName}</Text>
+        <Image source={require("../assets/space-icon.png")} style={{ padding: 10 }} />
+
+        <Text style={{ fontSize: 23, marginTop: 15, marginBottom: 10 }}>{props.spaceName} 스페이스</Text>
+
         {count ? (
-          <Text style={{ fontSize: 20, marginBottom: 90, color: "gray" }}>
+          <Text style={{ fontSize: 17, marginBottom: 90, color: "gray" }}>
             {props.name}님 외 {count}참가 중
           </Text>
         ) : (
-          <Text style={{ fontSize: 20, marginBottom: 90, color: "gray" }}>{props.name}님 참가 중</Text>
+          <Text style={{ fontSize: 17, marginBottom: 90, color: "gray" }}>{props.name}님 참가 중</Text>
         )}
 
         <TouchableOpacity style={{ width: "100%", alignItems: "center" }}>
@@ -152,16 +186,24 @@ function FinishCreateSpace(props) {
               alignItems: "center",
             }}
           >
-            <Label3>우리 가족이 맞아요!</Label3>
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: "6 00",
+                color: "white",
+              }}
+            >
+              우리 가족이 맞아요!
+            </Text>
           </LinearGradient>
         </TouchableOpacity>
 
-        <TouchableOpacity style={{ padding: 15 }}>
+        <TouchableOpacity onPress={() => props.navigation.goBack()} style={{ padding: 15 }}>
           <Text style={{ fontSize: 20, fontWeight: "500", color: "gray" }}>이전 화면으로</Text>
         </TouchableOpacity>
       </View>
 
       <StatusBar style="dark" />
-    </MainContainer>
+    </LinearGradient>
   );
 }

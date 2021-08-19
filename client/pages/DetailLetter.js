@@ -45,7 +45,7 @@ const NewLetterBox = styled.View`
 
 const URL = "http://ec2-13-209-36-69.ap-northeast-2.compute.amazonaws.com:8080";
 
-export default function SendLetter({ navigation }) {
+export default function DetailLetter({ navigation }) {
   const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext);
   const { name, email, photoUrl, userId } = storedCredentials;
 
@@ -67,36 +67,33 @@ export default function SendLetter({ navigation }) {
   };
 
   return (
-    <MainContainer style={{ paddingBottom: 190 }}>
-      <TouchableOpacity onPress={() => navigation.goBack()} style={{ position: "absolute", top: 80, right: 30 }}>
-        <Image source={require("../assets/back.png")} style={{ padding: 10 }} />
-      </TouchableOpacity>
+    <MainContainer>
+      <Text style={{ fontSize: "23", fontWeight: "600", marginBottom: 30, marginLeft: 20, alignSelf: "start" }}>
+        {}이 보낸 편지
+      </Text>
 
-      <Text style={{ fontSize: "23", marginBottom: 30, marginLeft: 20, alignSelf: "start" }}>{}에게</Text>
-      <TextInput
-        multiline={true}
-        numberOfLines={100}
-        value={content}
-        onChangeText={(value) => setContent(value)}
+      <View
         style={{
           width: "90%",
           height: "35%",
-          fontSize: 23,
+
           borderWidth: 1,
-          borderColor: "#BFC3CF",
+          borderColor: "#7F48F5",
           borderRadius: 8,
           padding: 20,
           paddingTop: 15,
         }}
-      />
+      >
+        <Text style={{ fontSize: 20 }}>에잇 짱짱</Text>
+      </View>
 
       <TouchableOpacity onPress={handleSendLetter} style={{ width: "100%", alignItems: "center" }} disabled={!content}>
-        <LinearGradient
-          colors={["#8743FF", "#4136F1"]}
-          start={{ x: 1, y: 0 }}
+        <View
           style={{
             width: "90%",
             height: 55,
+            borderWidth: 1,
+            borderColor: "#7F48F5",
             borderRadius: 8,
 
             justifyContent: "center",
@@ -105,9 +102,10 @@ export default function SendLetter({ navigation }) {
             marginTop: 25,
           }}
         >
-          <Label3>편지 보내기</Label3>
-        </LinearGradient>
+          <Label3 style={{ color: "#7F48F5" }}>답장 보내기</Label3>
+        </View>
       </TouchableOpacity>
+      <View style={{ padding: 100 }} />
     </MainContainer>
   );
 }

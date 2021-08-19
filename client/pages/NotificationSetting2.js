@@ -17,7 +17,7 @@ Notifications.setNotificationHandler({
   },
 });
 
-export default function NotificationTest(props) {
+export default function NotificationSetting(props) {
   const [title, setTitle] = useState();
   const [body, setBody] = useState();
   const [token, setToken] = useState();

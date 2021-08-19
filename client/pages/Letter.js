@@ -39,7 +39,7 @@ const Width = Dimensions.get("window").width;
 const Height = Dimensions.get("window").height;
 
 const NewLetterBox = styled.View`
-  background: ${Colors.lilac};
+  background: ${colorSet[randomNumber]};
   width: 90%;
   height: 270;
   border-radius: 8;
@@ -47,7 +47,7 @@ const NewLetterBox = styled.View`
 
 const Tab = createMaterialTopTabNavigator();
 
-function ReceiveBox() {
+function ReceiveBox(props) {
   const [userList, setUserList] = useState([]);
   const [letterList, setLetterList] = useState([1, 2, 3, 4, 5]);
   const [newLetter, setNewLetter] = useState(false);
@@ -59,27 +59,29 @@ function ReceiveBox() {
       <FlatList
         data={letterList}
         renderItem={({ letter }) => (
-          <View style={{ width: Width, alignItems: "center", marginBottom: 20 }}>
-            <NewLetterBox>
-              <Image
-                source={require("../assets/letter.png")}
-                style={{ position: "absolute", top: 20, left: 23, padding: 60, paddingHorizontal: 170 }}
-              />
-              <View
-                style={{
-                  width: 70,
-                  padding: 7,
-                  borderRadius: 12,
-                  backgroundColor: "red",
-                  position: "absolute",
-                  top: 10,
-                  right: 10,
-                }}
-              >
-                <Text style={{ color: "white", fontSize: 20, fontWeight: "700", textAlign: "center" }}>NEW</Text>
-              </View>
-            </NewLetterBox>
-          </View>
+          <TouchableOpacity onPress={() => props.navigation.navigate("DetailLetter")}>
+            <View style={{ width: Width, alignItems: "center", marginBottom: 20 }}>
+              <NewLetterBox>
+                <Image
+                  source={require("../assets/letter.png")}
+                  style={{ position: "absolute", top: 20, left: 23, padding: 60, paddingHorizontal: 170 }}
+                />
+                <View
+                  style={{
+                    width: 70,
+                    padding: 7,
+                    borderRadius: 12,
+                    backgroundColor: "red",
+                    position: "absolute",
+                    top: 10,
+                    right: 10,
+                  }}
+                >
+                  <Text style={{ color: "white", fontSize: 20, fontWeight: "700", textAlign: "center" }}>NEW</Text>
+                </View>
+              </NewLetterBox>
+            </View>
+          </TouchableOpacity>
         )}
         // keyExtractor={(item) => String(item.id)}
       />
@@ -123,7 +125,7 @@ function SendBox() {
   );
 }
 
-function Tabs() {
+function Tabs({ navigation }) {
   return (
     <Tab.Navigator
       style={{ top: 100, zIndex: -1 }}
@@ -139,7 +141,7 @@ function Tabs() {
       }}
       swipeEnabled={false}
     >
-      <Tab.Screen name="받은 편지함" component={ReceiveBox} />
+      <Tab.Screen name="받은 편지함" component={ReceiveBox} navigation={navigation} />
       <Tab.Screen name="보낸 편지함" component={SendBox} />
     </Tab.Navigator>
   );
@@ -147,8 +149,8 @@ function Tabs() {
 
 const URL = "http://ec2-13-209-36-69.ap-northeast-2.compute.amazonaws.com:8080";
 
-export default function Letter({ navigation }) {
-  // const { name, email, photoUrl, userId } = props.route.params.credentials;
+export default function Letter(props, { navigation }) {
+  const { name, email, photoUrl, userId } = props.route.params.credentials;
 
   const [title, setTitle] = useState();
   const [body, setBody] = useState();
@@ -158,6 +160,10 @@ export default function Letter({ navigation }) {
   const [showReceive, setShowReceive] = useState(false);
 
   const [letterList, setLetterList] = useState(["편지1", "편지2"]);
+
+  useEffect(() => {
+    axios.get(`${URL}/letter/recieve/${userId}/`);
+  }, []);
 
   return (
     <>

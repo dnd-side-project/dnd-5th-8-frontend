@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { View, Text, TouchableOpacity, TextInput, Image } from "react-native";
+import { View, Text, TouchableOpacity, TextInput, Image, Switch } from "react-native";
 import Constants from "expo-constants";
 
 const StatusBarHeight = Constants.statusBarHeight;
@@ -16,9 +16,10 @@ export const Colors = {
 
 export const Container = styled.View`
   flex: 1;
-  background: #170c59;
   justify-content: center;
   align-items: center;
+
+  background: #090139;
 `;
 export const MainContainer = styled.View`
   flex: 1;
@@ -79,7 +80,7 @@ export const GoogleLoginButton = styled.TouchableOpacity`
   flex-direction: row;
 
   position:absolute;
-  bottom:100
+  bottom:100px
   
 `;
 
@@ -134,7 +135,7 @@ export const Label2 = styled.Text`
 `;
 export const Label3 = styled.Text`
   font-size: 23px;
-  font-weight: bold;
+  font-weight: 600;
   color: #ffffff;
 `;
 

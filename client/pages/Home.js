@@ -25,17 +25,15 @@ export default function Home({ navigation }) {
   const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext);
   const { name, email, photoUrl, userId } = storedCredentials;
 
-  console.log("홈페이지에서..", CredentialsContext);
-
   return (
     <Container>
       <Title>홈 페이지</Title>
       <TestButton
         onPress={() => {
-          navigation.navigate("BottomSheet");
+          navigation.navigate("QuestionList");
         }}
       >
-        <Label2>바텀 시트</Label2>
+        <Label2>통신 목록</Label2>
       </TestButton>
 
       <TestButton

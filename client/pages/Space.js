@@ -11,7 +11,6 @@ import { LinearGradient } from "expo-linear-gradient";
 
 export default function Space({ navigation }) {
   const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext);
-  console.log("스페이스에서..", storedCredentials);
 
   return (
     <MainContainer>
@@ -55,15 +54,6 @@ export default function Space({ navigation }) {
           <Text style={{ color: "#611DF2", fontSize: 17 }}>초대코드를 받았어요!</Text>
           <Label3 style={{ color: "#611DF2", margin: 7 }}>스페이스 참가하기</Label3>
         </LinearGradient>
-      </SpaceButton>
-
-      <SpaceButton
-        style={{ position: "absolute", bottom: 100 }}
-        onPress={() => {
-          navigation.navigate("Letter", { credentials: storedCredentials });
-        }}
-      >
-        <Text style={{ fontSize: 50 }}>편지함</Text>
       </SpaceButton>
 
       <StatusBar style="dark" />
