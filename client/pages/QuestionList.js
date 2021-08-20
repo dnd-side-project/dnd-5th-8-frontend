@@ -34,14 +34,37 @@ export default function QuestionList({ navigation }) {
   const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext);
   const { name, email, photoUrl, userId, space, spaceId } = storedCredentials;
 
-  const [questionList, setQuestionList] = useState([1, 2]);
+  const [questionList, setQuestionList] = useState([]);
+  const [commentLength, setCommentLength] = useState([]);
 
   useEffect(() => {
+    // 임시로 오늘의 질문 조회
     axios
-      .get(`${URL}/daily-questions/list/space/${spaceId}`)
-      .then((res) => setQuestionList(res.data))
+      .get(`${URL}/daily-questions/space/${spaceId}`)
+      .then((res) => {
+        let temp = [...questionList];
+        temp.push(res.data);
+        setQuestionList(temp);
+      })
       .catch((err) => alert("통신 목록을 불러오지 못했습니다."));
-  }, [questionList]);
+    // axios
+    //   .get(`${URL}/daily-questions/list/space/${spaceId}`)
+    //   .then((res) => setQuestionList(res.data))
+    //   .catch((err) => alert("통신 목록을 불러오지 못했습니다."));
+  }, []);
+
+  useEffect(() => {
+    if (questionList.length > 0) {
+      axios
+        .get(`${URL}/daily-questions/1/space/${spaceId}`)
+        .then((res) => {
+          setCommentLength(res.data.comment.length);
+        })
+        .catch((err) => alert("통신 목록을 불러오지 못했습니다."));
+    }
+  });
+
+  console.log("questionList:", questionList);
 
   return (
     <MainContainer>
@@ -66,7 +89,7 @@ export default function QuestionList({ navigation }) {
             top: 120,
           }}
           data={questionList}
-          renderItem={({ question }) => (
+          renderItem={({ item }) => (
             <View
               style={{
                 flexDirection: "row",
@@ -84,15 +107,26 @@ export default function QuestionList({ navigation }) {
               }}
             >
               <View>
-                <Text style={{ fontSize: 20, fontWeight: "600" }}>치킨 피자</Text>
-                <Text style={{ color: "#B7B7B7", paddingTop: 10 }}>2021.1.1</Text>
+                <Text style={{ fontSize: 20, fontWeight: "600" }}>{item.questionContent}</Text>
+                <View style={{ flexDirection: "row" }}>
+                  <Text style={{ color: "#B7B7B7", paddingTop: 10 }}>{item.date.substring(0, 10)}</Text>
+                  <Text style={{ color: "#B7B7B7", paddingTop: 10, marginLeft: 30 }}>{item.answerCount}2명 답변</Text>
+                </View>
               </View>
 
               <TouchableOpacity
-                onPress={() => navigation.navigate("AnswerComment", { questionId: 0 })}
+                onPress={() =>
+                  navigation.navigate("AnswerComment", {
+                    // 추후에 id 확인할 것
+                    questionId: 1,
+                    questionContent: item.questionContent,
+                    date: item.date.substring(0, 10),
+                  })
+                }
                 style={{ height: "100%", backgroundColor: "#F0E0FF", padding: 15, borderRadius: 8 }}
               >
-                <Text style={{ color: "#7C58FF", fontSize: 15 }}>댓글</Text>
+                <Text style={{ fontSize: 17, fontWeight: "500", textAlign: "center" }}>{commentLength}</Text>
+                <Text style={{ color: "#7C58FF", fontSize: 15, marginTop: 5 }}>댓글</Text>
               </TouchableOpacity>
             </View>
           )}

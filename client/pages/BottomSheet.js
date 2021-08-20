@@ -35,7 +35,6 @@ export default function BS(props) {
     <>
       <Container>
         <Button title="바텀 시트 열려라" onPress={() => sheetRef.current.snapTo(0)} />
-        <Button onPress={props.navigation.goBack} title="뒤로 가기" />
       </Container>
       <BottomSheet ref={sheetRef} snapPoints={[100, 450, 100]} borderRadius={10} renderContent={renderContent} />
     </>

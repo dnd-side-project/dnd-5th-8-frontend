@@ -76,10 +76,7 @@ export default function Login() {
 
   return (
     <Container>
-      <Image
-        source={require("../assets/main.png")}
-        style={{ position: "absolute", height: 1, paddingTop: 500, top: 100, zIndex: -1 }}
-      />
+      <Image source={require("../assets/main.png")} style={{ position: "absolute", height: "100%", zIndex: -1 }} />
 
       <View style={{ alignItems: "center", top: -170 }}>
         <Image source={require("../assets/logo.png")} style={{ marginBottom: 20 }} />

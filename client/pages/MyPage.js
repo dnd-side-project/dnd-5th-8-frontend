@@ -66,9 +66,9 @@ export default function MyPage(props) {
         onPress={() => {
           props.navigation.navigate("EditProfile");
         }}
-        style={{ position: "absolute", top: 130, right: 17 }}
+        style={{ position: "absolute", top: 130, right: 17, zIndex: 1 }}
       >
-        <View style={{ backgroundColor: "#F2F4F8", borderRadius: 25, padding: 10, zIndex: -1 }}>
+        <View style={{ backgroundColor: "#F2F4F8", borderRadius: 25, padding: 10 }}>
           <Image source={require("../assets/write.png")} style={{ padding: 10 }} />
         </View>
       </TouchableOpacity>

@@ -43,7 +43,7 @@ const URL = "http://ec2-13-209-36-69.ap-northeast-2.compute.amazonaws.com:8080";
 
 export default function EditProfile(props) {
   const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext);
-  const { name, email, photoUrl, userId } = storedCredentials;
+  const { name, email, photoUrl, userId, space, spaceId } = storedCredentials;
   const AvatarImg = photoUrl
     ? {
         uri: photoUrl,
@@ -75,14 +75,6 @@ export default function EditProfile(props) {
     });
 
     if (pickerResult.cancelled === false) {
-      const credentials = {
-        name: name,
-        email: email,
-        photoUrl: pickerResult.uri,
-        userId: userId,
-      };
-      props.setCredentials(credentials);
-
       const formData = new FormData();
       const photo = {
         uri: pickerResult.uri,
@@ -96,7 +88,15 @@ export default function EditProfile(props) {
         .put(`${URL}/user/${userId}`, formData, {
           headers: { "content-type": "multipart/form-data" },
         })
-        .then((res) => alert(JSON.stringify(res)))
+        .then((res) => {
+          const credentials = {
+            name: name,
+            email: email,
+            photoUrl: res.data.profile,
+            userId: userId,
+          };
+          props.setCredentials(credentials);
+        })
         .catch((err) => alert(`에러:${err}`));
     }
   };
@@ -110,9 +110,11 @@ export default function EditProfile(props) {
         email: email,
         photoUrl: result.uri,
         userId: userId,
+        space: space,
+        spaceId: spaceId,
       };
 
-      props.setCredentials(credentials);
+      setStoredCredentials(credentials);
 
       const formData = new FormData();
       const photo = {
@@ -127,7 +129,7 @@ export default function EditProfile(props) {
         .put(`${URL}/user/${userId}`, formData, {
           headers: { "content-type": "multipart/form-data" },
         })
-        .then((res) => alert(JSON.stringify(res)))
+        .then((res) => {})
         .catch((err) => alert(`에러:${err}`));
     }
   };
@@ -144,8 +146,21 @@ export default function EditProfile(props) {
       email: email,
       photoUrl: photoUrl,
       userId: userId,
+      space: space,
+      spaceId: spaceId,
     };
     setStoredCredentials(credentials);
+
+    const formData = new FormData();
+
+    formData.append("nickname", name);
+
+    axios
+      .put(`${URL}/user/${userId}`, formData, {
+        headers: { "content-type": "multipart/form-data" },
+      })
+      .then((res) => {})
+      .catch((err) => alert(`에러:${err}`));
   };
 
   return (
@@ -162,14 +177,14 @@ export default function EditProfile(props) {
       >
         <Text style={{ color: "white", fontSize: 23, fontWeight: "700", textAlign: "center", top: 77 }}>프로필 수정</Text>
 
-        <TouchableOpacity onPress={() => props.navigation.goBack()} style={{ position: "absolute", top: 80, right: 30 }}>
+        <TouchableOpacity onPress={() => props.navigation.goBack()} style={{ position: "absolute", top: 80, left: 30 }}>
           <Image source={require("../assets/back-arrow.png")} />
         </TouchableOpacity>
       </View>
 
       <View style={{ flexDirection: "row", position: "absolute", top: 130 }}>
         <Avatar resizeMode="cover" source={AvatarImg} style={{ width: 130, height: 130 }} />
-        <TouchableOpacity onPress={openImagePickerAsync} style={{ zIndex: 1 }}>
+        <TouchableOpacity onPress={addDocumentFile} style={{ zIndex: 1 }}>
           <View
             style={{
               position: "absolute",
@@ -217,7 +232,7 @@ export default function EditProfile(props) {
         </LinearGradient>
       </TouchableOpacity>
 
-      <Modal
+      {/* <Modal
         animationType="fade"
         transparent={true}
         visible={modalVisible}
@@ -239,7 +254,7 @@ export default function EditProfile(props) {
             </TouchableHighlight>
           </View>
         </View>
-      </Modal>
+      </Modal> */}
 
       <StatusBar style="light" />
     </MainContainer>

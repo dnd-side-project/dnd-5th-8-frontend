@@ -258,7 +258,7 @@ export default function NotificationSetting(props) {
           marginBottom: 20,
         }}
       >
-        <Text style={{ fontSize: 20, fontWeight: "5 00" }}>댓글 알림</Text>
+        <Text style={{ fontSize: 20, fontWeight: "500" }}>댓글 알림</Text>
         <Switch
           trackColor={{ false: "#CFD3FF", true: "#424CC1" }}
           onValueChange={() => toggleSwitch(3)}

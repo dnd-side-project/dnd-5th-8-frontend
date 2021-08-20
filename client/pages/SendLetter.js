@@ -27,6 +27,7 @@ import {
   StyledTextInput,
   Container2,
   MainTextInput,
+  Avatar,
 } from "../components/styles";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { LinearGradient } from "expo-linear-gradient";
@@ -47,11 +48,27 @@ const URL = "http://ec2-13-209-36-69.ap-northeast-2.compute.amazonaws.com:8080";
 
 export default function SendLetter({ navigation }) {
   const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext);
-  const { name, email, photoUrl, userId } = storedCredentials;
+  const { name, email, photoUrl, userId, space, spaceId } = storedCredentials;
 
-  const [toId, setToId] = useState(10);
+  const [toId, setToId] = useState();
+  const [toName, setToName] = useState("");
   const [fromId, setFromId] = useState(userId);
   const [content, setContent] = useState("");
+  const [family, setFamily] = useState([]);
+
+  const [token, setToken] = useState("");
+
+  useEffect(() => {
+    axios
+      .get(`${URL}/space/attend/${space}`)
+      .then((res) => setFamily(res.data.family))
+      .catch((err) => alert(`가족 리스트를 받아오지 못했습니다 : ${err}`));
+  }, []);
+
+  const handleSelectTo = (x) => {
+    setToId(x.userId);
+    setToName(x.nickname);
+  };
 
   const handleSendLetter = () => {
     const body = {
@@ -62,17 +79,35 @@ export default function SendLetter({ navigation }) {
 
     axios
       .post(`${URL}/letter`, body)
-      .then((res) => alert(JSON.stringify(res)))
-      .catch((err) => alert(err));
+      .then((res) => {
+        alert("편지 전송 완료");
+        setToken(res.data);
+      })
+      .catch((err) => alert("편지를 보내지 못했습니다."));
   };
 
   return (
     <MainContainer style={{ paddingBottom: 190 }}>
-      <TouchableOpacity onPress={() => navigation.goBack()} style={{ position: "absolute", top: 80, right: 30 }}>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={{ position: "absolute", top: 80, right: 30, zIndex: 1 }}>
         <Image source={require("../assets/back.png")} style={{ padding: 10 }} />
       </TouchableOpacity>
 
-      <Text style={{ fontSize: 23, marginBottom: 30, marginLeft: 20, alignSelf: "start" }}>{}에게</Text>
+      <FlatList
+        style={{ width: Width, position: "absolute", top: 80, left: 30 }}
+        horizontal={true}
+        data={family}
+        renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => handleSelectTo(item)} style={{ marginRight: 20 }}>
+            <Avatar resizeMode="cover" source={{ uri: item.profile }} style={{ width: 60, height: 60 }} />
+          </TouchableOpacity>
+        )}
+        keyExtractor={(item) => item.touserId}
+      />
+
+      <View style={{ flexDirection: "row", width: Width }}>
+        <Text style={{ fontSize: 23, marginBottom: 20, marginLeft: 20, left: 15, color: "#611DF2" }}>{toName}</Text>
+        <Text style={{ fontSize: 23, marginBottom: 20, marginLeft: 15 }}>에게</Text>
+      </View>
       <TextInput
         multiline={true}
         numberOfLines={100}

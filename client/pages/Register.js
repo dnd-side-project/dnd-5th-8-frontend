@@ -155,13 +155,6 @@ export default function Register({ navigation }) {
         ) : null}
       </View>
 
-      <Button
-        onPress={() => {
-          navigation.navigate("Home");
-        }}
-        title="홈페이지"
-      />
-
       <TouchableOpacity onPress={handleSubmit} style={{ width: "100%", alignItems: "center", position: "absolute", bottom: 50 }}>
         <LinearGradient
           colors={["#8743FF", "#4136F1"]}

@@ -32,19 +32,12 @@ export default function Main({ navigation }) {
   useEffect(() => {
     axios.get(`${URL}/space/attend/${space}`).then((res) => {
       setSpaceName(res.data.spaceName);
-      console.log(res.data.family);
-    });
-    axios.put(`${URL}/space/attend/${userId}`, { code: space }).then((res) => {
-      setStoredCredentials({ name, email, photoUrl, userId, space, spaceId: res.data });
     });
   }, []);
 
   return (
     <Container>
-      <Image
-        source={require("../assets/main.png")}
-        style={{ position: "absolute", height: 1, paddingTop: 500, top: 100, zIndex: -1 }}
-      />
+      <Image source={require("../assets/main.png")} style={{ position: "absolute", height: "100%", zIndex: -1 }} />
 
       <Text style={{ color: "white", fontSize: 27, fontWeight: "500", position: "absolute", top: 70, left: 30 }}>
         {spaceName}

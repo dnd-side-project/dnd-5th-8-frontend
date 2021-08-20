@@ -78,31 +78,46 @@ function ReceiveBox(props) {
         // keyExtractor={(item) => String(item.id)}
       />
 
+      <TouchableOpacity onPress={() => props.navigation.navigate("DetailLetter")}>
+        <View style={{ width: Width, alignItems: "center", marginVertical: 10 }}>
+          <NewLetterBox>
+            <Image
+              source={require("../assets/letter.png")}
+              style={{ position: "absolute", top: 20, left: 23, padding: 60, paddingHorizontal: 170 }}
+            />
+            <View
+              style={{
+                width: 70,
+                padding: 7,
+                borderRadius: 12,
+                backgroundColor: "red",
+                position: "absolute",
+                top: 10,
+                right: 10,
+              }}
+            >
+              <Text style={{ color: "white", fontSize: 20, fontWeight: "700", textAlign: "center" }}>NEW</Text>
+            </View>
+
+            <View style={{ flexDirection: "row" }}></View>
+          </NewLetterBox>
+        </View>
+      </TouchableOpacity>
+
       <FlatList
         data={letterList}
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => props.navigation.navigate("DetailLetter")}>
-            <View style={{ width: Width, alignItems: "center" }}>
-              <NewLetterBox>
-                <Image
-                  source={require("../assets/letter.png")}
-                  style={{ position: "absolute", top: 20, left: 23, padding: 60, paddingHorizontal: 170 }}
-                />
-                <View
-                  style={{
-                    width: 70,
-                    padding: 7,
-                    borderRadius: 12,
-                    backgroundColor: "red",
-                    position: "absolute",
-                    top: 10,
-                    right: 10,
-                  }}
-                >
-                  <Text style={{ color: "white", fontSize: 20, fontWeight: "700", textAlign: "center" }}>NEW</Text>
+            <View style={{ width: Width, alignItems: "center", marginVertical: 10 }}>
+              <NewLetterBox style={{ backgroundColor: `${Colors.green}` }}>
+                <View style={{ flexDirection: "row", top: 10 }}>
+                  <Avatar resizeMode="cover" source={{ uri: userList[0].profile }} style={{ width: 30, height: 30, right: 80 }} />
+                  <Text style={{ fontSize: 20, fontWeight: "600", right: 170, top: 14, color: "#611DF2" }}>
+                    {item.recieveNickname}
+                  </Text>
+                  <Text style={{ fontSize: 20, fontWeight: "600", right: 170, top: 12 }}>에게 온 편지</Text>
                 </View>
-                <Text>{item.recieveNickname}에게 온 편지</Text>
-                <Text>{item.content}</Text>
+                <Text style={{ fontSize: 17, padding: 30, paddingHorizontal: 40 }}>{item.content}</Text>
               </NewLetterBox>
             </View>
           </TouchableOpacity>
@@ -114,7 +129,7 @@ function ReceiveBox(props) {
 }
 function SendBox() {
   const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext);
-  const { name, email, photoUrl, userId } = storedCredentials;
+  const { name, email, photoUrl, userId, space, spaceId } = storedCredentials;
 
   const [letterList, setLetterList] = useState([]);
 
@@ -127,6 +142,8 @@ function SendBox() {
       .catch((err) => alert(err));
   }, []);
 
+  console.log("letterList...", letterList);
+
   return (
     <View
       style={{ flex: 1, width: Width, justifyContent: "center", alignItems: "center", backgroundColor: "white", paddingTop: 100 }}
@@ -135,26 +152,13 @@ function SendBox() {
         data={letterList}
         renderItem={({ item }) => (
           <View style={{ width: Width, alignItems: "center", marginBottom: 20 }}>
-            <NewLetterBox>
-              <Image
-                source={require("../assets/letter.png")}
-                style={{ position: "absolute", top: 20, left: 23, padding: 60, paddingHorizontal: 170 }}
-              />
-              <Text style={{ fontSize: 30 }}>{item.toNickname}에게 보낸 편지</Text>
-              <Text style={{ fontSize: 25 }}>{item.content}</Text>
-              <View
-                style={{
-                  width: 70,
-                  padding: 7,
-                  borderRadius: 12,
-                  backgroundColor: "red",
-                  position: "absolute",
-                  top: 10,
-                  right: 10,
-                }}
-              >
-                <Text style={{ color: "white", fontSize: 20, fontWeight: "700", textAlign: "center" }}>NEW</Text>
+            <NewLetterBox style={{ backgroundColor: `${Colors.yellow}` }}>
+              <View style={{ flexDirection: "row", top: 10 }}>
+                <Avatar resizeMode="cover" source={{ uri: item.toProfile }} style={{ width: 30, height: 30, right: 80 }} />
+                <Text style={{ fontSize: 20, fontWeight: "600", right: 170, top: 14, color: "#611DF2" }}>{item.toNickname}</Text>
+                <Text style={{ fontSize: 20, fontWeight: "600", right: 170, top: 12 }}>에게 보낸 편지</Text>
               </View>
+              <Text style={{ fontSize: 17, padding: 30, paddingHorizontal: 40 }}>{item.content}</Text>
             </NewLetterBox>
           </View>
         )}
