@@ -1,0 +1,6 @@
+/node_modules
+/assets
+/dist
+/coverage
+babel.config.js
+metro.config.js
