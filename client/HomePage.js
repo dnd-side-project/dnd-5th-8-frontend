@@ -16,6 +16,10 @@ export default function HomePage({ navigation }) {
         navigation.navigate('Talk')
       }
     />
+     <Button
+      title="패밀리 체크 이동"
+      onPress={() =>
+        navigation.navigate('FamilyChecking')
     <Button
       title="스페이스 참여하기"
       onPress={() =>

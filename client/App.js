@@ -7,6 +7,7 @@ import LoginPage from './LoginPage';
 import TalkPage from './TalkPage';
 import WaitPage from './WaitPage';
 import CategorySelectionPage from './CategorySelectionPage';
+import CheckFamilyPage from './CheckFamilyPage';
 import AttendSpacePage from './AttendSpacePage';
 
 const Stack = createStackNavigator();
@@ -37,6 +38,8 @@ export default function App() {
           component={CategorySelectionPage} 
         />
         <Stack.Screen 
+          name="FamilyChecking" 
+          component={CheckFamilyPage} 
           name="AttendSpace" 
           component={AttendSpacePage} 
         />
